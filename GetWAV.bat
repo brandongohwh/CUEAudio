@@ -1,0 +1,1 @@
+dir /s/b %~dp0\CopiedWAV\*.wav > wav.log
