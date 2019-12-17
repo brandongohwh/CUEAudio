@@ -23,5 +23,3 @@ All copyright goes to the respective copyright holders
 <br/>a. Save extraction locaton to file also -> Handle later due to fast push
 6. Clean code by changing lots of constants to variables
 7. Make cross-compatibility by delivering full Python script/C#
-
-Use of this software is governed by the MIT license and the authors do not expressly provide consent to use the software to facilitate illegal piracy of audio files. Additionally, please respect the (software/app) developers and their wishes if they so express.
