@@ -3,6 +3,7 @@ ProcessingFolder/
 Sound/
 Extracted/
 .vscode/
+updatedfolder.log
 
 # Other files and folders
 *.code-workspace
