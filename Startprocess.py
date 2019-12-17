@@ -149,7 +149,7 @@ os.chdir(dname)
 
 ori=os.getcwd()
 
-def PreProcessing():
+def PreProcessing(val):
     folders= []
     for r, d, f in os.walk(os.path.join(os.getcwd(),'ProcessingFolder')):
         for folder in d:
@@ -159,8 +159,13 @@ def PreProcessing():
     for f in folders:
         for fi in os.listdir(f):
             if os.path.splitext(fi)[1].lower() == '.wav':
-                print("%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"%warning)
-                print("To make this error disappear, remove all .wav files from the ProcessingFolder folder\n")
+                if val==0:
+                    print("%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"%warning)
+                    print("To make this error disappear, remove all .wav files from the ProcessingFolder folder\n")
+                elif val==1:
+                    print("%s\nThe program is unable to copy all the .wav files into the destination folders.")
+                    print("Please remove all .wav files from the ProcessingFolder folder before next execution\n")
+
                 sys.exit(0)
     
     subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'CleanFolder.bat'))])
@@ -294,8 +299,7 @@ def extractfolder(fol):
     if not os.path.exists(os.path.join(ori,fol)):
         os.mkdir(os.path.join(ori,fol))
 
-
-PreProcessing()
+PreProcessing(0)
 os.chdir(ori)
 ADBexec()
 ACB2WAV()
@@ -303,3 +307,4 @@ fol='Extracted'
 extractfolder(fol)
 updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
 copyF(os.path.join(ori,fol))
+PreProcessing(1)
