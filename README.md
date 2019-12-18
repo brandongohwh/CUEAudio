@@ -5,7 +5,7 @@ Pulls audio from CUE and processes it into WAV files. This code is also **extend
 ## Special Thanks
 The code uses the following repositories:
 
-- Deretore: [link](https://github.com/OpenCGSS/DereTore)
+- Deretore (/deretore/): [link](https://github.com/OpenCGSS/DereTore)
 
 The code also uses the following programs:
 
