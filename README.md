@@ -14,7 +14,9 @@ The code also uses the following programs:
 All copyright from the use of the programs mentioned goes to the respective copyright holders.
 
 ##Requirements
+
 - Python 3
+
 ## Notes
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
 ## Steps (New):
