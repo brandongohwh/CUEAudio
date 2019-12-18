@@ -1,13 +1,17 @@
 # CUEOriginal
 
-Pulls audio from CUE and processes it into WAV files. This code is also **extendible** to games that use Unity audio compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
+Pulls audio from CUE and processes it into WAV files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
 
 ## Special Thanks
 The code uses the following repositories:
 
 - Deretore: [link](https://github.com/OpenCGSS/DereTore)
 
-All copyright goes to the respective copyright holders
+The code also uses the following programs:
+
+- ADB (/platform-tools/): [link](https://developer.android.com/studio/releases/platform-tools#downloads)
+
+All copyright from the use of the programs mentioned goes to the respective copyright holders.
 ## Notes
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
 ## Steps (New):
