@@ -8,6 +8,11 @@ import shutil
 from datetime import datetime
 import sys
 import filecmp
+'''
+For mp3
+import struct
+print(struct.calcsize("P") * 8) //32 for 32-bit & 64 for 64-bit
+'''
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -249,6 +254,13 @@ def ACB2WAV():
     
     print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
 
+#For WAV2MP3 conversion
+def WAVMP3():
+    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'WAV2MP3.bat'))])
+    
+    print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
+
+
 def copyF(fol):
     for f in os.listdir(os.path.join(ori,'ProcessingFolder')):
         for r,d,f2 in os.walk(fol):
@@ -285,6 +297,7 @@ PreProcessing(0)
 os.chdir(ori)
 ADBexec()
 ACB2WAV()
+#WAV2MP3()
 fol='Extracted'
 extractfolder(fol)
 updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
