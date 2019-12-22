@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import os
 import time
 import subprocess
@@ -8,11 +7,14 @@ import shutil
 from datetime import datetime
 import sys
 import filecmp
-'''
-For mp3
+
+#For mp3
+import platform
 import struct
-print(struct.calcsize("P") * 8) //32 for 32-bit & 64 for 64-bit
-'''
+
+#Constants
+#1 for MP3 conversion (will delete WAV), 0 for WAV
+mp3=0
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -254,12 +256,6 @@ def ACB2WAV():
     
     print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
 
-#For WAV2MP3 conversion
-def WAVMP3():
-    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'WAV2MP3.bat'))])
-    
-    print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
-
 
 def copyF(fol):
     for f in os.listdir(os.path.join(ori,'ProcessingFolder')):
@@ -297,9 +293,16 @@ PreProcessing(0)
 os.chdir(ori)
 ADBexec()
 ACB2WAV()
-#WAV2MP3()
 fol='Extracted'
 extractfolder(fol)
 updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
 copyF(os.path.join(ori,fol))
 PreProcessing(1)
+
+if (mp3):
+    if platform.system()=="Windows":
+        if (struct.calcsize("P") * 8)==64: #32 for 32-bit & 64 for 64-bit
+            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv64.bat'))])
+        elif (struct.calcsize("P") * 8)==32:
+            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv.bat'))])
+        subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
