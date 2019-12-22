@@ -22,6 +22,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
 - To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```:
 ```mp3=1``` → ```mp3=0```
+- Note that using ```mp3=0``` will result in the WAV files being deleted. If you need the WAV files, use ```mp3=1``` and run ```MP3Conv.bat``` or ```MP3Conv64.bat``` manually. ```MP3Conv.bat``` is for 32/x86 systems and ```MP3Conv.bat``` is for 64/x64 systems.
 
 ## Steps (New):
 1. *Start init.bat* (Simple enough)
