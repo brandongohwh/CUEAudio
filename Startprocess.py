@@ -19,8 +19,9 @@ mp3=0
 #For option selection
 import argparse
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
-parser.add_argument('ExtDir', help="Specify extraction folder")
-parser.add_argument('--app', help='Application name')
+parser.add_argument('-O', help="Specify output folder")
+parser.add_argument('-A', help='Application name')
+parser.add_argument('-init', action='store_true', help="Emulate initial pull, extracts all current and previous files")
 
 args = parser.parse_args()
 sys.exit(0)
