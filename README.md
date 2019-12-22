@@ -1,6 +1,6 @@
-# CUEOriginal
+# CUE! - See You Everyday Audio Puller
 
-Pulls audio from CUE and processes it into WAV files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
+Pulls audio from CUE! and processes it into WAV/MP3 files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
 
 ## Special Thanks
 The code uses the following repositories:

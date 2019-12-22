@@ -16,6 +16,15 @@ import struct
 #1 for MP3 conversion (will delete WAV), 0 for WAV
 mp3=0
 
+#For option selection
+import argparse
+parser = argparse.ArgumentParser(description='CUE! Audio Puller')
+parser.add_argument('ExtDir', help="Specify extraction folder")
+parser.add_argument('--app', help='Application name')
+
+args = parser.parse_args()
+sys.exit(0)
+
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -136,7 +145,7 @@ warning='''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%###(*,,*%#####(%%###%%%%%%%#%%&@&&@&&%#%%%%%%%####%%%####%%,,,*###%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###((###%%##%##########%#(#%%%%#((#%##########%%##%##((####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 '''
-print("%s\nWelcome to CUE Audio puller!"%icon)
+print("%s\nWelcome to CUE! Audio puller!"%icon)
 #print(sys.argv)
 
 #Must change running directory or else there'll be an error
@@ -307,6 +316,6 @@ if (mp3):
             subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv.bat'))])
         subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
     elif platform.system()=="Darwin":
-        continue #For mac
-    elif platform.system()=="Linux"
-        continue #For Linux
+        pass #For mac
+    elif platform.system()=="Linux":
+        pass #For Linux
