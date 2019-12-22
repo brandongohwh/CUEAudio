@@ -306,3 +306,7 @@ if (mp3):
         elif (struct.calcsize("P") * 8)==32:
             subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv.bat'))])
         subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
+    elif platform.system()=="Darwin":
+        continue #For mac
+    elif platform.system()=="Linux"
+        continue #For Linux
