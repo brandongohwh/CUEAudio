@@ -10,6 +10,7 @@ The code uses the following repositories:
 The code also uses the following programs:
 
 - ADB (/platform-tools/): [link](https://developer.android.com/studio/releases/platform-tools#downloads)
+- LAME MP3 Encoder (/lame/): [link](https://lame.sourceforge.io/)
 
 All copyright from the use of the programs mentioned goes to the respective copyright holders.
 
@@ -19,6 +20,9 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 ## Notes
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
+- To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```:
+```mp3=1``` → ```mp3=0```
+
 ## Steps (New):
 1. *Start init.bat* (Simple enough)
 3. Clean processing folder of stray .wav files
