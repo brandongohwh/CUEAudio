@@ -19,12 +19,17 @@ mp3=0
 #For option selection
 import argparse
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
-parser.add_argument('-O', help="Specify output folder")
-parser.add_argument('-A', help='Application name')
-parser.add_argument('-init', action='store_true', help="Emulate initial pull, extracts all current and previous files")
+parser.add_argument('-o', help="Specify output folder", dest='Out')
+parser.add_argument('-a', help='Android application name', dest='AName')
+parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files")
+parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
+parser.add_argument('-d', action='store_true', dest='del', help='Deletes WAV')
 
 args = parser.parse_args()
-sys.exit(0)
+#print(args.Out)
+if (len(sys.argv)==1):
+    parser.print_help()
+    sys.exit(0)
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -295,9 +300,12 @@ def updateFolder(src,dst):
                 print(os.path.join(dst,i))
             updateFolder(os.path.join(src,i),os.path.join(dst,i))
 
-def extractfolder(fol):
-    if not os.path.exists(os.path.join(ori,fol)):
-        os.mkdir(os.path.join(ori,fol))
+def extractfolder(fol,fpath=False):
+    if fpath==False:
+        if not os.path.exists(os.path.join(ori,fol)):
+            os.mkdir(os.path.join(ori,fol))
+    else:
+        pass #Require creation of folder until desired directory
 
 PreProcessing(0)
 os.chdir(ori)
@@ -305,6 +313,21 @@ ADBexec()
 ACB2WAV()
 fol='Extracted'
 extractfolder(fol)
+
+#extractFolder -> Create root extraction folder
+#updateFolder -> Create sub-directory extraction folder
+if args.Out==False:
+    fol='Extracted'
+    extractfolder(fol)
+    updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
+else:
+    if platform.system()=="Windows":
+        if args.Out[1]==":":
+            extractfolder(args.Out,True)
+            updateFolder(args.Out,os.path.join(ori,fol))
+        else:
+            extractfolder(args.Out) 
+
 updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
 copyF(os.path.join(ori,fol))
 PreProcessing(1)
