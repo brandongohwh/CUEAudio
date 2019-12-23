@@ -48,13 +48,13 @@ optional arguments:
 
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
 
-- ~~To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```: ```mp3=1``` → ```mp3=0```~~ (See *Use* for update to this)
+- ~~To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```: ```mp3=1``` → ```mp3=0```~~ (See **Use** for update to this)
 - Options only apply to current execution, i.e. files pulled from the previous execution will not be subjected to the current options.
-
+- Each execution is **additive** (i.e. new files are constantly added and renamed if older files are present)
 
 ## Steps (New):
 
-1. *Start init.bat* (Simple enough)
+1. *Start init.bat* (Simple enough) **OR** use either of the commands provided above in the **USE** section.
 3. Clean processing folder of stray .wav files
 
 ## Current things to do:
