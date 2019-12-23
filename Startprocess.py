@@ -23,13 +23,11 @@ parser.add_argument('-o', help="Specify output folder", dest='Out')
 parser.add_argument('-a', help='Android application name', dest='AName')
 parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files")
 parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
-parser.add_argument('-d', action='store_true', dest='del', help='Deletes WAV')
+parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
+parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer")
 
 args = parser.parse_args()
-#print(args.Out)
-if (len(sys.argv)==1):
-    parser.print_help()
-    sys.exit(0)
+
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -305,7 +303,7 @@ def extractfolder(fol,fpath=False):
         if not os.path.exists(os.path.join(ori,fol)):
             os.mkdir(os.path.join(ori,fol))
     else:
-        pass #Require creation of folder until desired directory
+        os.makedirs(fol)
 
 PreProcessing(0)
 os.chdir(ori)
@@ -317,29 +315,32 @@ extractfolder(fol)
 #extractFolder -> Create root extraction folder
 #updateFolder -> Create sub-directory extraction folder
 if args.Out==False:
-    fol='Extracted'
     extractfolder(fol)
     updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
+    copyF(os.path.join(ori,fol))
 else:
     if platform.system()=="Windows":
-        if args.Out[1]==":":
+        if ":" in args.Out:
             extractfolder(args.Out,True)
             updateFolder(args.Out,os.path.join(ori,fol))
+            copyF(args.Out)
         else:
             extractfolder(args.Out) 
-
-updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
-copyF(os.path.join(ori,fol))
+            updateFolder(os.path.join(ori,args.Out),os.path.join(ori,fol))
+            copyF(os.path.join(ori,args.Out))
 PreProcessing(1)
 
-if (mp3):
+if (args.conv):
     if platform.system()=="Windows":
         if (struct.calcsize("P") * 8)==64: #32 for 32-bit & 64 for 64-bit
             subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv64.bat'))])
         elif (struct.calcsize("P") * 8)==32:
             subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv.bat'))])
-        subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
+        if (args.Del):
+            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
     elif platform.system()=="Darwin":
+        #Install lame on Mac
         pass #For mac
     elif platform.system()=="Linux":
+        #Install lame on linux
         pass #For Linux
