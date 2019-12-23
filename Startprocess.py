@@ -13,7 +13,7 @@ import argparse
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
 parser.add_argument('-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
 parser.add_argument('-a', help='Android application name (Not tested yet, use at own risk!)', dest='AName')
-parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files (Not yet implemented)")
+parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files")
 parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
 parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
 parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer (Not yet implemented)")
@@ -165,6 +165,7 @@ ori=os.getcwd()
 
 def PreProcessing(val):
     folders= []
+    
     if os.path.exists(os.path.join(ori,'ProcessingFolder')):
         for r, d, f in os.walk(os.path.join(os.getcwd(),'ProcessingFolder')):
             for folder in d:
@@ -187,10 +188,12 @@ def PreProcessing(val):
 def ADBexec(init=0):   
     folders = []
     
-    for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
-        for folder in d:
-            if os.listdir(os.path.join(r,folder)):
-                folders.append(os.path.join(r, folder))
+    if not init:
+        print('noinit')
+        for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
+            for folder in d:
+                if os.listdir(os.path.join(r,folder)):
+                    folders.append(os.path.join(r, folder))
             
     # !Make sure working directory reset since Python messes up things
     os.chdir(ori)
@@ -219,6 +222,7 @@ def ADBexec(init=0):
     g.write("Changed Folders:\n")
 
     if init:
+        print('init')
         folderpost= []
         for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
             for folder in d:
@@ -235,6 +239,7 @@ def ADBexec(init=0):
                 
     else:
         # Gets updated folders only
+        print('noinit')
         folderpost= []
         for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
             for folder in d:
@@ -315,7 +320,10 @@ def extractfolder(fol,fpath=False):
 
 PreProcessing(0)
 os.chdir(ori)
-ADBexec()
+if args.init==False or args.init==None:
+    ADBexec()
+else:
+    ADBexec(1)
 ACB2WAV()
 fol='Extracted'
 
