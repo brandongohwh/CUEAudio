@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Killed redundancy
-# settle extra directory issues (especially -o switch)
 import os
 import time
 import subprocess
@@ -9,22 +7,19 @@ import shutil
 from datetime import datetime
 import sys
 import filecmp
-
-#For mp3
 import platform
 import struct
-
-#For option selection
 import argparse
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
-parser.add_argument('-o', help="Specify output folder", dest='Out')
-parser.add_argument('-a', help='Android application name', dest='AName')
-parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files")
+parser.add_argument('-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
+parser.add_argument('-a', help='Android application name (Not tested yet, use at own risk!)', dest='AName')
+parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files (Not yet implemented)")
 parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
 parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
-parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer")
+parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer (Not yet implemented)")
 
 args = parser.parse_args()
+
 #print(args.Out)
 '''
 if (len(sys.argv)==1):
@@ -170,9 +165,10 @@ ori=os.getcwd()
 
 def PreProcessing(val):
     folders= []
-    for r, d, f in os.walk(os.path.join(os.getcwd(),'ProcessingFolder')):
-        for folder in d:
-            folders.append(os.path.join(r, folder))
+    if os.path.exists(os.path.join(ori,'ProcessingFolder')):
+        for r, d, f in os.walk(os.path.join(os.getcwd(),'ProcessingFolder')):
+            for folder in d:
+                folders.append(os.path.join(r, folder))
     
         
     for f in folders:
@@ -181,7 +177,7 @@ def PreProcessing(val):
                 if val==0:
                     print("%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"%warning)
                     print("To make this error disappear, remove all .wav files from the ProcessingFolder folder\n")
-                    os._exit(0)
+                    sys.exit(0)
                 elif val==1:
                     print("%s\nThe program is unable to copy all the .wav files into the destination folders.")
                     print("Please remove all .wav files from the ProcessingFolder folder before next execution\n")
@@ -325,7 +321,7 @@ fol='Extracted'
 
 #extractFolder -> Create root extraction folder
 #updateFolder -> Create sub-directory extraction folder
-if args.Out==False:
+if args.Out==None or args.Out==False:
     extractfolder(fol)
     updateFolder(os.path.join(ori,'Sound'),os.path.join(ori,fol))
     copyF(os.path.join(ori,fol))
