@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# Killed redundancy
+# settle extra directory issues (especially -o switch)
 import os
 import time
 import subprocess
@@ -12,10 +14,6 @@ import filecmp
 import platform
 import struct
 
-#Constants
-#1 for MP3 conversion (will delete WAV), 0 for WAV
-mp3=0
-
 #For option selection
 import argparse
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
@@ -27,6 +25,16 @@ parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
 parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer")
 
 args = parser.parse_args()
+#print(args.Out)
+'''
+if (len(sys.argv)==1):
+    parser.print_help()
+    sys.exit(0)
+    '''
+
+if platform.system()!="Windows":
+    print("Program hasn't been tested for Linux/Mac yet!")
+    sys.exit(0)
 
 
 icon='''
@@ -199,7 +207,12 @@ def ADBexec(init=0):
     for i in range(5,0,-1):
         print(i)
         time.sleep(1)
-    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'adbpull.bat'))])
+    if platform.system()=='Windows':
+        subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'adbpull.bat'))])
+    elif platform.system()=='Darwin':
+        pass #mac
+    else:
+        pass #linux
         
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -266,7 +279,7 @@ def ADBexec(init=0):
 
 def ACB2WAV():
     subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'ACB2WAVlong.bat'))])
-    
+    # -> Convert this to python code
     print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
 
 
@@ -310,7 +323,6 @@ os.chdir(ori)
 ADBexec()
 ACB2WAV()
 fol='Extracted'
-extractfolder(fol)
 
 #extractFolder -> Create root extraction folder
 #updateFolder -> Create sub-directory extraction folder
