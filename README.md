@@ -47,9 +47,10 @@ optional arguments:
 ## Notes
 
 - This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
-- ~~To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```:
-```mp3=1``` → ```mp3=0```~~ (See *Use* for update to this)
+
+- ~~To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```: ```mp3=1``` → ```mp3=0```~~ (See *Use* for update to this)
 - Options only apply to current execution, i.e. files pulled from the previous execution will not be subjected to the current options.
+
 
 ## Steps (New):
 
