@@ -174,18 +174,17 @@ def PreProcessing(val):
         for folder in d:
             folders.append(os.path.join(r, folder))
     
-            
+        
     for f in folders:
         for fi in os.listdir(f):
             if os.path.splitext(fi)[1].lower() == '.wav':
                 if val==0:
                     print("%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"%warning)
                     print("To make this error disappear, remove all .wav files from the ProcessingFolder folder\n")
+                    os._exit(0)
                 elif val==1:
                     print("%s\nThe program is unable to copy all the .wav files into the destination folders.")
                     print("Please remove all .wav files from the ProcessingFolder folder before next execution\n")
-
-                sys.exit(0)
     
     subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'CleanFolder.bat'))])
 
