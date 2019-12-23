@@ -2,9 +2,9 @@
 
 Pulls audio from CUE! and processes it into WAV/MP3 files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
 
-## Special Thanks
+## Acknowledgements
 
-The code uses the following repositories:
+The code incorporates code from the following repositories:
 
 - Deretore (/deretore/): [link](https://github.com/OpenCGSS/DereTore)
 
