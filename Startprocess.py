@@ -10,6 +10,8 @@ import filecmp
 import platform
 import struct
 import argparse
+import shutil
+
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
 parser.add_argument('-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
 parser.add_argument('-a', help='Android application name (Not tested yet, use at own risk!)', dest='AName')
@@ -183,7 +185,9 @@ def PreProcessing(val):
                     print("Please remove all .wav files from the ProcessingFolder folder before next execution\n")
                 sys.exit(0)
     
-    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'CleanFolder.bat'))])
+    if os.path.exists(os.path.join(ori,'ProcessingFolder')):
+        shutil.rmtree(os.path.join(ori,'ProcessingFolder'))
+    os.makedirs(os.path.join(ori,'ProcessingFolder'))
 
 def ADBexec(init=0):   
     folders = []
@@ -202,6 +206,7 @@ def ADBexec(init=0):
 
     print("Starting ADB in ")
     for i in range(5,0,-1):
+        print(i)
         time.sleep(1)
     if platform.system()=='Windows':
         x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
