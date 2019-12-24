@@ -28,11 +28,11 @@ if (len(sys.argv)==1):
     parser.print_help()
     sys.exit(0)
     '''
-
+'''
 if platform.system()!="Windows":
     print("Program hasn't been tested for Linux/Mac yet!")
     sys.exit(0)
-
+'''
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -209,11 +209,28 @@ def ADBexec(init=0):
         print(i)
         time.sleep(1)
     if platform.system()=='Windows':
-        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
+        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
+        if x:
+            for i in range(3):
+                print("You may need to authorise ADB to access your Android device! Waiting for 5 seconds.")
+                time.sleep(5)
+                x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
+                if not x:
+                    break
+
     elif platform.system()=='Darwin':
         x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','mac','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
     elif platform.system()=='Linux':
-        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','linux','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
+        subprocess.call(['chmod' ,'+x',os.path.join(os.getcwd(),'platform-tools','linux','adb')])
+        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','linux','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
+        if x:
+            for i in range(3):
+                print("You may need to authorise ADB to access your Android device! Waiting for 5 seconds.")
+                time.sleep(5)
+                x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','linux','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
+                if not x:
+                    break
+
     if x:
         print("There is an error with ADB, program terminating!")
         sys.exit(0)
@@ -266,9 +283,9 @@ def ADBexec(init=0):
                     print(os.path.join(f,fi))
                     g.write(os.path.join(f,fi))
                     g.write("\n")
-                    if not os.path.isdir(os.path.join(ori,'Processingfolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),'')):
-                        os.mkdir(os.path.join(ori,'Processingfolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),''))
-                    shutil.copy(os.path.join(f,fi),os.path.join(ori,'Processingfolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),''))
+                    if not os.path.isdir(os.path.join(ori,'ProcessingFolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),'')):
+                        os.mkdir(os.path.join(ori,'ProcessingFolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),''))
+                    shutil.copy(os.path.join(f,fi),os.path.join(ori,'ProcessingFolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),''))
     else:
         g.write("<NIL>\n")
         print("No new files added!")

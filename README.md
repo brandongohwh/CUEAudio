@@ -19,6 +19,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 - Python 3
 - Wine (For Mac/Linux)
+    - apt install wine-stable (Debian/Ubuntu)
 
 ## Use
 
