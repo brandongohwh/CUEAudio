@@ -189,7 +189,6 @@ def ADBexec(init=0):
     folders = []
     
     if not init:
-        print('noinit')
         for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
             for folder in d:
                 if os.listdir(os.path.join(r,folder)):
@@ -206,7 +205,10 @@ def ADBexec(init=0):
         print(i)
         time.sleep(1)
     if platform.system()=='Windows':
-        subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'adbpull.bat'))])
+        #subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'adbpull.bat'))])
+        subprocess.call([os.path.join(os.getcwd(),'platform-tools','win'))+ 'adb.exe pull "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/."'+ os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
+        print("Success")
+        sys.exit(0)
     elif platform.system()=='Darwin':
         pass #mac
     else:
