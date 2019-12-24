@@ -202,7 +202,6 @@ def ADBexec(init=0):
 
     print("Starting ADB in ")
     for i in range(5,0,-1):
-        print(i)
         time.sleep(1)
     if platform.system()=='Windows':
         x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
@@ -232,7 +231,6 @@ def ADBexec(init=0):
             for s in folderpost:
                 g.write(s)
                 g.write("\n")
-                print(s)
         else:
             g.write("<NIL>\n")
         g.write("-----------------------------------------------\n")
@@ -249,7 +247,6 @@ def ADBexec(init=0):
             for s in folderpost:
                 g.write(s)
                 g.write("\n")
-                print(s)
         else:
             g.write("<NIL>\n")
         g.write("-----------------------------------------------\n")
@@ -279,10 +276,17 @@ def ADBexec(init=0):
     g.close()
 
 def ACB2WAV():
-    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'ACB2WAVlong.bat'))])
-    # -> Convert this to python code
-    # print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
-
+    for r,d,f in os.walk(os.path.join(ori,'ProcessingFolder')):
+        for l in d:
+            for s in os.listdir(os.path.join(r,l)):
+                if os.path.splitext(s)[1].lower() in ['.acb']:
+                    subprocess.call([os.path.join(ori,'deretore','Release','acbUnzip.exe'),os.path.join(r,l,s)])
+    
+    for r,d,f in os.walk(os.path.join(ori,'ProcessingFolder')):
+        for l in d:
+            for s in os.listdir(os.path.join(r,l)):
+                if os.path.splitext(s)[1].lower() in ['.hca']:
+                    subprocess.call([os.path.join(ori,'deretore','Release','hca2wav.exe'),os.path.join(r,l,s)])
 
 def copyF(fol):
     for f in os.listdir(os.path.join(ori,'ProcessingFolder')):
@@ -347,16 +351,26 @@ else:
 PreProcessing(1)
 
 if (args.conv):
-    if platform.system()=="Windows":
-        if (struct.calcsize("P") * 8)==64: #32 for 32-bit & 64 for 64-bit
-            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv64.bat'))])
-        elif (struct.calcsize("P") * 8)==32:
-            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'MP3Conv.bat'))])
-        if (args.Del):
-            subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])
-    elif platform.system()=="Darwin":
-        #Install lame on Mac
-        pass #For mac
-    elif platform.system()=="Linux":
-        #Install lame on linux
-        pass #For Linux
+    if args.Out==None or args.Out==False:
+        for r,d,f in os.walk(os.path.join(ori,'Extracted')):
+            for l in d:
+                for s in os.listdir(os.path.join(r,l)): 
+                    if os.path.splitext(s)[1].lower() in ['.wav']:
+                        if not (os.path.splitext(s)[0]+'.mp3') in os.listdir(os.path.join(r,l)):
+                            if platform.system()=="Windows":
+                                if (struct.calcsize("P") * 8)==64: #32 for 32-bit & 64 for 64-bit
+                                    subprocess.call([os.path.join(ori,'lame','win64','lame.exe'), os.path.join(r,l,s), os.path.splitext(os.path.join(r,l,s))[0]+'.mp3', '-b', '320'])
+                                elif (struct.calcsize("P") * 8)==32:
+                                    subprocess.call([os.path.join(ori,'lame','win32','lame.exe'), os.path.join(r,l,s), os.path.splitext(os.path.join(r,l,s))[0]+'.mp3', '-b', '320'])
+                            elif platform.system()=="Darwin":
+                                #Install lame on Mac
+                                pass #For mac
+                            elif platform.system()=="Linux":
+                                #https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
+                                if 'ubuntu' in platform.platform().lower():
+                                    import apt
+                                    cache=apt.Cache()
+
+                                pass #For Linux
+if (args.Del):
+    subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'delWAV.bat'))])

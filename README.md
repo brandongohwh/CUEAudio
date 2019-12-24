@@ -18,6 +18,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 ## Requirements
 
 - Python 3
+- Wine (For Mac/Linux)
 
 ## Use
 
