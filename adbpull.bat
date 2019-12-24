@@ -1,1 +1,0 @@
-%~dp0\platform-tools\win\adb pull "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/." %~dp0\Sound

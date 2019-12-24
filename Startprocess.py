@@ -16,7 +16,7 @@ parser.add_argument('-a', help='Android application name (Not tested yet, use at
 parser.add_argument('-init', action='store_true', dest='init', help="Emulate initial pull, extracts all current and previous files")
 parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
 parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
-parser.add_argument('-p', type=int, help="Port number for ADB, applies to NoxPlayer (Not yet implemented)")
+parser.add_argument('-p', type=int, help="Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet implemented)")
 
 args = parser.parse_args()
 
@@ -199,21 +199,20 @@ def ADBexec(init=0):
         
     # Update latest files by pulling from phone/emulator
     # I am not going to make sure it calls adb connect 5555 / 62001 (Nox) first
-    # Edit the adbpull.bat if necessary
+
     print("Starting ADB in ")
     for i in range(5,0,-1):
         print(i)
         time.sleep(1)
     if platform.system()=='Windows':
-        #subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'adbpull.bat'))])
-        subprocess.call([os.path.join(os.getcwd(),'platform-tools','win'))+ 'adb.exe pull "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/."'+ os.path.realpath(os.path.join(os.getcwd(),'Sound'))])
-        print("Success")
-        sys.exit(0)
+        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','win','adb.exe') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
     elif platform.system()=='Darwin':
-        pass #mac
-    else:
-        pass #linux
-        
+        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','mac','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
+    elif platform.system()=='Linux':
+        x=subprocess.call([os.path.join(os.getcwd(),'platform-tools','linux','adb') ,'pull',"/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.",os.path.realpath(os.path.join(os.getcwd(),'Sound'))])  
+    if x:
+        print("There is an error with ADB, program terminating!")
+        sys.exit(0)
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     
@@ -224,7 +223,6 @@ def ADBexec(init=0):
     g.write("Changed Folders:\n")
 
     if init:
-        print('init')
         folderpost= []
         for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
             for folder in d:
@@ -241,7 +239,6 @@ def ADBexec(init=0):
                 
     else:
         # Gets updated folders only
-        print('noinit')
         folderpost= []
         for r, d, f in os.walk(os.path.join(os.getcwd(),'Sound')):
             for folder in d:
@@ -272,6 +269,8 @@ def ADBexec(init=0):
                     shutil.copy(os.path.join(f,fi),os.path.join(ori,'Processingfolder',os.path.basename(os.path.join(f,os.path.splitext(fi)[0])),''))
     else:
         g.write("<NIL>\n")
+        print("No new files added!")
+        sys.exit(0)
     
     #End init block 
     os.chdir(ori)
@@ -282,7 +281,7 @@ def ADBexec(init=0):
 def ACB2WAV():
     subprocess.call([os.path.realpath(os.path.join(os.getcwd(),'ACB2WAVlong.bat'))])
     # -> Convert this to python code
-    print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
+    # print("Extracted WAV files now in %s"%os.path.join(ori,'CopiedWAV',''))
 
 
 def copyF(fol):
