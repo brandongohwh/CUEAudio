@@ -3,6 +3,7 @@
 import os
 import time
 import subprocess
+from subprocess import PIPE
 import shutil
 from datetime import datetime
 import sys
@@ -19,6 +20,7 @@ parser.add_argument('-init', action='store_true', dest='init', help="Emulate ini
 parser.add_argument('-c', action='store_true', dest='conv', help='Converts extracted WAV to MP3')
 parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
 parser.add_argument('-p', type=int, help="Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet implemented)")
+parser.add_argument('-n', action='store_true', help='Use Native apps where available (Not yet implemented)')
 
 args = parser.parse_args()
 
@@ -33,6 +35,37 @@ if platform.system()!="Windows":
     print("Program hasn't been tested for Linux/Mac yet!")
     sys.exit(0)
 '''
+#Pre-req check
+#https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
+if 'ubuntu' in platform.platform().lower():
+    import apt
+    cache=apt.Cache()
+    pkg1=cache['wine-stable']
+    pkg2=cache['wine-development']
+    pkg3=cache['winetricks']
+    x=0
+    if not pkg1.is_installed and not pkg2.is_installed:
+        x+=1
+        print("\nWine has not been detected on the system, preparing to install.\nProvide sudo password when prompted!\nCommencing installation in 10s.\n")
+        time.sleep(10)
+        subprocess.call(['sudo','apt','install','wine-stable'])
+    if not pkg3.is_installed:
+        if not x:
+            print("\nWinetricks has not been detected on the system, preparing to install.\nProvide sudo password when prompted!\nCommencing installation in 10s.\n")
+            time.sleep(10)
+        else:
+            print("\nInstalling winetricks add-on.\nProvide sudo password when prompted!\nCommencing installation in 5s.\n")
+            time.sleep(5)
+        subprocess.call(['sudo','apt','install','winetricks'])
+    f=subprocess.Popen(['winetricks','list-installed'],stdout=PIPE)
+    a=f.communicate()
+    if not ('dotnet45' in str(a)):
+        subprocess.call(['winetricks','dotnet45'])
+elif platform.system()=='Windows':
+    pass
+else:
+    sys.exit(0)
+
 
 icon='''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -302,13 +335,20 @@ def ACB2WAV():
         for l in d:
             for s in os.listdir(os.path.join(r,l)):
                 if os.path.splitext(s)[1].lower() in ['.acb']:
-                    subprocess.call([os.path.join(ori,'deretore','Release','acbUnzip.exe'),os.path.join(r,l,s)])
+                    if platform.system()=='Windows':
+                        subprocess.call([os.path.join(ori,'deretore','Release','acbUnzip.exe'),os.path.join(r,l,s)])
+                    elif platform.system()=='Linux':
+                        subprocess.call(['wine', os.path.join(ori,'deretore','Release','acbUnzip.exe'),os.path.join(r,l,s)])
     
     for r,d,f in os.walk(os.path.join(ori,'ProcessingFolder')):
         for l in d:
             for s in os.listdir(os.path.join(r,l)):
                 if os.path.splitext(s)[1].lower() in ['.hca']:
-                    subprocess.call([os.path.join(ori,'deretore','Release','hca2wav.exe'),os.path.join(r,l,s)])
+                    if platform.system()=='Windows':
+                        subprocess.call([os.path.join(ori,'deretore','Release','hca2wav.exe'),os.path.join(r,l,s)])
+                    elif platform.system()=='Linux':
+                        subprocess.call(['wine', os.path.join(ori,'deretore','Release','hca2wav.exe'),os.path.join(r,l,s)])
+
 
 def copyF(fol):
     for f in os.listdir(os.path.join(ori,'ProcessingFolder')):
@@ -388,10 +428,7 @@ if (args.conv):
                                 #Install lame on Mac
                                 pass #For mac
                             elif platform.system()=="Linux":
-                                #https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
-                                if 'ubuntu' in platform.platform().lower():
-                                    import apt
-                                    cache=apt.Cache()
+                                subprocess.call(['wine',os.path.join(ori,'lame','win32','lame.exe'), os.path.join(r,l,s), os.path.splitext(os.path.join(r,l,s))[0]+'.mp3', '-b', '320'])
 
                                 pass #For Linux
 if (args.Del):

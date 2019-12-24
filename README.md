@@ -19,7 +19,9 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 - Python 3
 - Wine (For Mac/Linux)
-    - apt install wine-stable (Debian/Ubuntu)
+    - Debian/Linux instructions:
+        - apt install wine-stable winetricks
+        - winetricks dotnet45
 
 ## Use
 
@@ -57,7 +59,7 @@ optional arguments:
 ## Steps (New):
 
 1. *Start init.bat* (Simple enough)
-3. Clean processing folder of stray .wav files
+3. ~~Clean processing folder of stray .wav files~~ (Should not happen due to fixed typo)
 
 ## Current things to do:
 
@@ -68,3 +70,4 @@ optional arguments:
 <br/>a. Save extraction locaton to file also -> Handle later due to fast push
 6. Clean code by changing lots of constants to variables
 7. Make cross-compatibility by delivering full Python script/C#
+8. Due to a problem, if you had used the default options the first time and opted to convert the files to MP3 the second time, the program will convert **ALL** existing WAV to MP3
