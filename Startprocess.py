@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser(description='CUE! Audio Puller')
 parser.add_argument(
     '-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
 parser.add_argument(
-    '-a', help='Android application name (Not tested yet, use at own risk!)', dest='AName')
+    '-a', help='Android application name (Not implemented yet)', dest='AName')
 parser.add_argument('-init', action='store_true', dest='init',
                     help="Emulate initial pull, extracts all current and previous files")
 parser.add_argument('-c', action='store_true', dest='conv',

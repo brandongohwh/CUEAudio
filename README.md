@@ -26,19 +26,20 @@ All copyright from the use of the programs mentioned goes to the respective copy
 ## Use
 
 ```
-usage: Startprocess.py [-h] [-o OUT] [-a ANAME] [-init] [-c] [-d] [-p P]
+usage: Startprocess.py [-h] [-o OUT] [-a ANAME] [-init] [-c] [-d] [-p P] [-n]
 
 CUE! Audio Puller
 
 optional arguments:
   -h, --help  show this help message and exit
   -o OUT      Specify output folder (Not tested yet, use at own risk!)
-  -a ANAME    Android application name (Not tested yet, use at own risk!)
+  -a ANAME    Android application name (Not implemented yet)
   -init       Emulate initial pull, extracts all current and previous files
-              (Not yet implemented)
   -c          Converts extracted WAV to MP3
   -d          Deletes WAV
-  -p P        Port number for ADB, applies to NoxPlayer (Not yet implemented)
+  -p P        Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet
+              implemented)
+  -n          Use Native apps where available (Only Ubuntu for now)
   ```
 
 ### Examples:
@@ -47,6 +48,7 @@ optional arguments:
   2. ```python startprocess.py``` → starts program with default options (Extract to WAV only)
   3. ```python startprocess.py -c``` → extracts WAV and converts these to MP3 (Both WAV and MP3 will be present)
   4. ```python startprocess.py -c -d``` → extracts WAV, converts to MP3 and deletes the WAV files
+  5. ```python startprocess.py -n``` → uses native apps where possible (instead of resorting to wine)
 
 ## Notes
 
