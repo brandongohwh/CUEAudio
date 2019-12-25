@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+#Package section
 import os
 import time
 import subprocess
@@ -13,127 +14,70 @@ import struct
 import argparse
 import shutil
 
-parser = argparse.ArgumentParser(description='CUE! Audio Puller')
-parser.add_argument(
-    '-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
-parser.add_argument(
-    '-a', help='Android application name (Not implemented yet)', dest='AName')
-parser.add_argument('-init', action='store_true', dest='init',
-                    help="Emulate initial pull, extracts all current and previous files")
-parser.add_argument('-c', action='store_true', dest='conv',
-                    help='Converts extracted WAV to MP3')
-parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
-parser.add_argument(
-    '-p', type=int, help="Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet implemented)")
-parser.add_argument('-n', action='store_true', dest='nat',
-                    help='Use Native apps where available (Only Ubuntu)')
-
-args = parser.parse_args()
-
-# print(args.Out)
-'''
-if (len(sys.argv)==1):
-    parser.print_help()
-    sys.exit(0)
-    '''
-'''
-if platform.system()!="Windows":
-    print("Program hasn't been tested for Linux/Mac yet!")
-    sys.exit(0)
-'''
-# Pre-req check
-# https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
-if 'ubuntu' in platform.platform().lower():
-    import apt
-    cache = apt.Cache()
-    pkg1 = cache['wine-stable']
-    pkg2 = cache['wine-development']
-    pkg3 = cache['winetricks']
-    x = 0
-    if not pkg1.is_installed and not pkg2.is_installed:
-        x += 1
-        print("""====================================================================================
+# String section
+# postfix:
+# AI: Already implemented
+# NI: Not implemented
+p1NI="""====================================================================================
 Phase 1:
 Wine has not been detected on the system, preparing to install.
 Provide sudo password if prompted!
 Commencing installation in 10s.
 ====================================================================================
-""")
-        time.sleep(10)
-        subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y'])
-    else:
-        print("""====================================================================================
+"""
+p1AI="""====================================================================================
 Phase 1: Wine already installed on system!
-""",end="")
-    if not pkg3.is_installed:
-        if not x:
-            print("""====================================================================================
+"""
+p2NI="""====================================================================================
 Phase 2:
 Winetricks has not been detected on the system, preparing to install.
 Provide sudo password if prompted!
 Commencing installation in 10s.
 ====================================================================================
-""")
-            time.sleep(10)
-        else:
-            print("""====================================================================================
-Phase 2:
-Installing winetricks add-on.
-Provide sudo password when prompted!
-Commencing installation in 5s.
-====================================================================================
-""")
-            time.sleep(5)
-        subprocess.call(['sudo', 'apt', 'install', 'winetricks','-y'])
-    else:
-        print("""Phase 2: Winetricks already installed on system!
-""",end="")
-    f = subprocess.Popen(['winetricks', 'list-installed'], stdout=PIPE)
-    a = f.communicate()
-    if not ('dotnet45' in str(a)):
-        print("""====================================================================================
+"""
+p2AI="""Phase 2: Winetricks already installed on system!
+"""
+p3NI="""====================================================================================
 Phase 3:
 Initiating installation of .NET Framework 4.5, follow instructions on screen.
 ====================================================================================
-""")
-        time.sleep(5)
-        subprocess.call(['winetricks', 'dotnet45'])
-    else:
-        print("""Phase 3: .NET Framework 4.5 already installed on system!\n""",end="")
-    if args.nat == True:
-        pkg4 = cache['lame']
-        if not pkg4.is_installed:
-            print("""====================================================================================
+"""
+p3AI="""Phase 3: .NET Framework 4.5 already installed on system!\n"""
+p4NI="""====================================================================================
 Phase 4:
 Lame has not been detected on the system, preparing to install.
 Provide sudo password if prompted!\nCommencing installation in 10s.
 ====================================================================================
-""")
-            time.sleep(10)
-            subprocess.call(['sudo', 'apt', 'install', 'lame','-y'])
-        else:
-            print("""Phase 4: Lame already installed on system!
-====================================================================================""",end="")
-    print("\nPre-requisite check complete!\n====================================================================================")
-elif platform.system() == 'Windows':
-    pass
-elif 'centos' in platform.platform().lower():
-    #Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
-    #subprocess.call(['su'])
-    #subprocess.call(['whoami'])
-    x=subprocess.call(['sudo','dnf','install','epel-release'])
-    if x:
-        print("\n====================================================================================\nYou may need to add your username to the sudoers file!\n\nRun the following command:\nsu\nvisudo\n\nOn the last line, add '<username> ALL=(ALL) ALL'\n\nSave and quit by pressing ESC, then typing in ':wq' and hit ENTER.\n\nRestart your system to have the changes take effect.\n====================================================================================")
-    #Edited visudo with <user> ALL=(ALL) ALL
-    sys.exit(0)
-else:
-    print("""\n
+"""
+p4AI="""Phase 4: Lame already installed on system!
+===================================================================================="""
+pOK="""
+Pre-requisite check complete!
+===================================================================================="""
+sudoProb="""
 ====================================================================================
-Support for Linux/Mac is not available yet!\n
-====================================================================================""")
-    sys.exit(0)
+You may need to add your username to the sudoers file!
 
+Run the following command:
+su
+visudo
 
+On the last line, add '<username> ALL=(ALL) ALL'
+
+Save and quit by pressing ESC, then typing in ':wq' and hit ENTER.
+
+Restart your system to have the changes take effect.
+===================================================================================="""
+noSup="""
+
+====================================================================================
+Support for Linux/Mac is not available yet!
+===================================================================================="""
+welcome="%s\nWelcome to CUE! Audio puller!\n"
+warningpre1="%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"
+warningpre2="To make this error disappear, remove all .wav files from the ProcessingFolder folder\n"
+warningpost1="%s\nThe program is unable to copy all the .wav files into the destination folders."
+warningpost2="Please remove all .wav files from the ProcessingFolder folder before next execution\n"
 icon = '''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
@@ -254,18 +198,38 @@ warning = '''
 %%%%%%%%%%%%%%%%%%%%%%%%%%%###(*,,*%#####(%%###%%%%%%%#%%&@&&@&&%#%%%%%%%####%%%####%%,,,*###%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###((###%%##%##########%#(#%%%%#((#%##########%%##%##((####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 '''
-print("%s\nWelcome to CUE! Audio puller!" % icon)
-# print(sys.argv)
 
-# Must change running directory or else there'll be an error
+# Initialisation section (IMPORTANT: DO NOT MOVE)
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-# Get existing folders
+## Root dir
 ori = os.getcwd()
 
+# Variables section
+sudoAPT=['sudo', 'apt', 'install']
+sudoNoPrompt=['-y']
 
+# Program argument section
+parser = argparse.ArgumentParser(description='CUE! Audio Puller')
+parser.add_argument(
+    '-o', help="Specify output folder (Not tested yet, use at own risk!)", dest='Out')
+parser.add_argument(
+    '-a', help='Android application name (Not implemented yet)', dest='AName')
+parser.add_argument('-init', action='store_true', dest='init',
+                    help="Emulate initial pull, extracts all current and previous files")
+parser.add_argument('-c', action='store_true', dest='conv',
+                    help='Converts extracted WAV to MP3')
+parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
+parser.add_argument(
+    '-p', type=int, help="Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet implemented)")
+parser.add_argument('-n', action='store_true', dest='nat',
+                    help='Use Native apps where available (Only Ubuntu)')
+
+args = parser.parse_args()
+
+# Function section
 def PreProcessing(val):
     folders = []
 
@@ -278,21 +242,16 @@ def PreProcessing(val):
         for fi in os.listdir(f):
             if os.path.splitext(fi)[1].lower() == '.wav':
                 if val == 0:
-                    print(
-                        "%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!" % warning)
-                    print(
-                        "To make this error disappear, remove all .wav files from the ProcessingFolder folder\n")
+                    print(warningpre1 % warning)
+                    print(warningpre2)
                 elif val == 1:
-                    print(
-                        "%s\nThe program is unable to copy all the .wav files into the destination folders.")
-                    print(
-                        "Please remove all .wav files from the ProcessingFolder folder before next execution\n")
+                    print(warningpost1 % warning)
+                    print(warningpost2)
                 sys.exit(0)
 
     if os.path.exists(os.path.join(ori, 'ProcessingFolder')):
         shutil.rmtree(os.path.join(ori, 'ProcessingFolder'))
     os.makedirs(os.path.join(ori, 'ProcessingFolder'))
-
 
 def ADBexec(init=0):
     folders = []
@@ -416,7 +375,6 @@ def ADBexec(init=0):
     g.flush()
     g.close()
 
-
 def ACB2WAV():
     for r, d, f in os.walk(os.path.join(ori, 'ProcessingFolder')):
         for l in d:
@@ -440,7 +398,6 @@ def ACB2WAV():
                         subprocess.call(['wine', os.path.join(
                             ori, 'deretore', 'Release', 'hca2wav.exe'), os.path.join(r, l, s)])
 
-
 def copyF(fol):
     for f in os.listdir(os.path.join(ori, 'ProcessingFolder')):
         for r, d, f2 in os.walk(fol):
@@ -463,7 +420,6 @@ def copyF(fol):
                                 shutil.move(os.path.join(r2, f4),
                                             os.path.join(r, f, f4))
 
-
 def updateFolder(src, dst):
     for i in os.listdir(src):
         if os.path.isdir(os.path.join(src, i)) and len(i) < 40:
@@ -472,7 +428,6 @@ def updateFolder(src, dst):
                 print(os.path.join(dst, i))
             updateFolder(os.path.join(src, i), os.path.join(dst, i))
 
-
 def extractfolder(fol, fpath=False):
     if fpath == False:
         if not os.path.exists(os.path.join(ori, fol)):
@@ -480,6 +435,67 @@ def extractfolder(fol, fpath=False):
     else:
         os.makedirs(fol)
 
+print(subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y']))
+sys.exit(0)
+
+# Pre-req check
+# https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
+if 'ubuntu' in platform.platform().lower():
+    import apt
+    cache = apt.Cache()
+    pkg1 = cache['wine-stable']
+    pkg2 = cache['wine-development']
+    pkg3 = cache['winetricks']
+    x = 0
+    if not pkg1.is_installed and not pkg2.is_installed:
+        x += 1
+        print(p1NI)
+        time.sleep(10)
+        subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y'])
+    else:
+        print(p1AI,end="")
+    if not pkg3.is_installed:
+        if not x:
+            print()
+            time.sleep(10)
+        else:
+            print(p2NI)
+            time.sleep(5)
+        subprocess.call(['sudo', 'apt', 'install', 'winetricks','-y'])
+    else:
+        print(p2AI,end="")
+    f = subprocess.Popen(['winetricks', 'list-installed'], stdout=PIPE)
+    a = f.communicate()
+    if not ('dotnet45' in str(a)):
+        print()
+        time.sleep(5)
+        subprocess.call(['winetricks', 'dotnet45'])
+    else:
+        print(p3AI,end="")
+    if args.nat == True:
+        pkg4 = cache['lame']
+        if not pkg4.is_installed:
+            print(p4NI)
+            time.sleep(10)
+            subprocess.call(['sudo', 'apt', 'install', 'lame','-y'])
+        else:
+            print(p4AI,end="")
+    print(pOK)
+elif platform.system() == 'Windows':
+    pass
+elif 'centos' in platform.platform().lower():
+    #Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
+    #https://stackoverflow.com/questions/567542/running-a-command-as-a-super-user-from-a-python-script
+    x=subprocess.call(['sudo','dnf','install','epel-release'])
+    if x:
+        print(sudoProb)
+    #Edited visudo with <user> ALL=(ALL) ALL
+    sys.exit(0)
+else:
+    print(noSup)
+    sys.exit(0)
+
+print(welcome % icon)
 
 PreProcessing(0)
 os.chdir(ori)
