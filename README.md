@@ -63,11 +63,12 @@ optional arguments:
 
 ## Current things to do:
 
-1. Cut down on number of scripts to run
-3. Creation of switches using getOpt or sys.argv *(Partially complete)*
-<br/>a. Break each sector into functions and execute based on switches
+1. ~~Cut down on number of scripts to run~~
+
+2. Creation of switches using getOpt or sys.argv *(Partially complete)*
+   - Break each sector into functions and execute based on switches
 5. Handle file extraction location
-<br/>a. Save extraction locaton to file also -> Handle later due to fast push
+   - Save extraction locaton to file also -> Handle later due to fast push
 6. Clean code by changing lots of constants to variables
-7. Make cross-compatibility by delivering full Python script/C#
+7. Make cross-compatibility by delivering full Python script ~~/C#~~
 8. Due to a problem, if you had used the default options the first time and opted to convert the files to MP3 the second time, the program will convert **ALL** existing WAV to MP3
