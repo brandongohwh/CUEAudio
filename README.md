@@ -19,7 +19,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 - Python 3
 - Wine (For Mac/Linux)
-    - Linux instructions:
+    - Ubuntu instructions:
         - apt install wine-stable winetricks
         - winetricks dotnet45
 
