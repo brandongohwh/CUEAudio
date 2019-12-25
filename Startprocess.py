@@ -60,7 +60,7 @@ Commencing installation in 10s.
 ====================================================================================
 """)
         time.sleep(10)
-        subprocess.call(['sudo', 'apt', 'install', 'wine-stable'])
+        subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y'])
     else:
         print("""====================================================================================
 Phase 1: Wine already installed on system!
@@ -84,7 +84,7 @@ Commencing installation in 5s.
 ====================================================================================
 """)
             time.sleep(5)
-        subprocess.call(['sudo', 'apt', 'install', 'winetricks'])
+        subprocess.call(['sudo', 'apt', 'install', 'winetricks','-y'])
     else:
         print("""Phase 2: Winetricks already installed on system!
 """,end="")
@@ -110,19 +110,27 @@ Provide sudo password if prompted!\nCommencing installation in 10s.
 ====================================================================================
 """)
             time.sleep(10)
-            subprocess.call(['sudo', 'apt', 'install', 'lame'])
+            subprocess.call(['sudo', 'apt', 'install', 'lame','-y'])
         else:
             print("""Phase 4: Lame already installed on system!
 ====================================================================================""",end="")
     print("\nPre-requisite check complete!\n====================================================================================")
 elif platform.system() == 'Windows':
     pass
+elif 'centos' in platform.platform().lower():
+    #Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
+    #subprocess.call(['su'])
+    #subprocess.call(['whoami'])
+    x=subprocess.call(['sudo','dnf','install','epel-release'])
+    if x:
+        print("\n====================================================================================\nYou may need to add your username to the sudoers file!\n\nRun the following command:\nsu\nvisudo\n\nOn the last line, add '<username> ALL=(ALL) ALL'\n\nSave and quit by pressing ESC, then typing in ':wq' and hit ENTER.\n\nRestart your system to have the changes take effect.\n====================================================================================")
+    #Edited visudo with <user> ALL=(ALL) ALL
+    sys.exit(0)
 else:
     print("""\n
-    ====================================================================================\n
-    Support for Linux/Mac is not available yet!\n
-    ====================================================================================\n
-    """)
+====================================================================================
+Support for Linux/Mac is not available yet!\n
+====================================================================================""")
     sys.exit(0)
 
 
