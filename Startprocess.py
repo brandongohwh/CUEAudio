@@ -211,6 +211,7 @@ def ACB2WAV():
         for l in d:
             for s in os.listdir(os.path.join(r, l)):
                 if os.path.splitext(s)[1].lower() in ['.hca']:
+                    print("Processing %s"% os.path.join(r,l,s))
                     if platform.system() == 'Windows':
                         subprocess.call(
                             [os.path.join(dere, 'hca2wav.exe'), os.path.join(r, l, s)])
