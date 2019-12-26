@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#Package section
+# Code starts from line 263
+
+# Package section
 import os
 import time
 import subprocess
-from subprocess import PIPE
 import shutil
 from datetime import datetime
 import sys
@@ -13,203 +14,27 @@ import platform
 import struct
 import argparse
 import shutil
-
-# String section
-# postfix:
-# AI: Already implemented
-# NI: Not implemented
-p1NI="""====================================================================================
-Phase 1:
-Wine has not been detected on the system, preparing to install.
-Provide sudo password if prompted!
-Commencing installation in 10s.
-====================================================================================
-"""
-p1AI="""====================================================================================
-Phase 1: Wine already installed on system!
-"""
-p2NI="""====================================================================================
-Phase 2:
-Winetricks has not been detected on the system, preparing to install.
-Provide sudo password if prompted!
-Commencing installation in 10s.
-====================================================================================
-"""
-p2AI="""Phase 2: Winetricks already installed on system!
-"""
-p3NI="""====================================================================================
-Phase 3:
-Initiating installation of .NET Framework 4.5, follow instructions on screen.
-====================================================================================
-"""
-p3AI="""Phase 3: .NET Framework 4.5 already installed on system!\n"""
-p4NI="""====================================================================================
-Phase 4:
-Lame has not been detected on the system, preparing to install.
-Provide sudo password if prompted!\nCommencing installation in 10s.
-====================================================================================
-"""
-p4AI="""Phase 4: Lame already installed on system!
-===================================================================================="""
-pOK="""
-Pre-requisite check complete!
-===================================================================================="""
-sudoProb="""
-====================================================================================
-You may need to add your username to the sudoers file!
-
-Run the following command:
-su
-visudo
-
-On the last line, add '<username> ALL=(ALL) ALL'
-
-Save and quit by pressing ESC, then typing in ':wq' and hit ENTER.
-
-Restart your system to have the changes take effect.
-===================================================================================="""
-noSup="""
-
-====================================================================================
-Support for Linux/Mac is not available yet!
-===================================================================================="""
-welcome="%s\nWelcome to CUE! Audio puller!\n"
-warningpre1="%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"
-warningpre2="To make this error disappear, remove all .wav files from the ProcessingFolder folder\n"
-warningpost1="%s\nThe program is unable to copy all the .wav files into the destination folders."
-warningpost2="Please remove all .wav files from the ProcessingFolder folder before next execution\n"
-icon = '''
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/*,..                   .,*//(((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((/,.   .*//(((((((((((((((((((((((((/*.   .*(((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((/,.  ,*(((((((((((((((((((((((((((((((((((((((((/,.  */(((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((*  .,((((((((((((((((((((((((((((((((((((((((((((((((((((/,  *((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((*  ./((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((*. .(((((((((((((((((((((((((
-(((((((((((((((((((((((((((((((((((. .*(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/  *((((((((((((((((((((((
-(((((((((((((((((((((((((((((((/. ./(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((, ,((((((((((((((((((((
-(((((((((((((((((((((((((((((. ./((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((* ,((((((((((((((((((
-(((((((((((((((((((((((((((((/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((,,(((((((((((((((((
-((((((((((((((((((((((((((/,.        ,*(((((((//////////(((((((((((((//////////(((((///////////////////////((((((//////////(((((((((
-(((((((((((((((((((((/,                   *((/          /(((((((((((/          ((((/                       (((((*          (((((((((
-(((((((((((((((((((.                       /(.         ,((((((((((((,         .((((.                      .(((((.         ,(((((((((
-((((((((((((((((/                        /(((          /(((((((((((/          *((((                       *((((/          /(((((((((
-((((((((((((((/                        *((((/          ((((((((((((*         .((((/                      .(((((,         .((((((((((
-(((((((((((((.             ,*/(//*.  ,((((((,         .((((((((((((.         *((((,         .((((((((((((((((((          /((((((((((
-((((((((((((.           *((((((((((((((((((/.         *((((((((((((          /(((/          *(((((((((((((((((/          (((((((((((
-(((((((((((           *((((((((((((((((((((*         .((((((((((((/          ((((*         .((((((((((((((((((*         .(((((((((((
-((((((((((*          ((((((((((((((((((((((.         *((((((((((((.         ,((((.                     /((((((.         *(((((((((((
-(((((((((/          /((((((((((((((((((((((          /(((((((((((/          /((((                      ((((((*          /(((((((((((
-(((((((((,         .((((((((((((((((((((((/          ((((((((((((,         .((((/                     .((((((.         ,((((((((((((
-(((((((((,          /(((((((((((((((((((((,         ,((((((((((((          /((((,                     *((((((          /((((((((((((
-(((((((((,          .(((((((((((((((((((((.         ,(((((((((((*          ((((/          /(((((((((((((((((((((((((((((((((((((((((
-(((((((((/           ./(((((((((((((((((((.          /((((((((/           /((((,         .((((((((((((((((((((*.   .*(((((((((((((((
-((((((((((*              ,*//*.   .(((((((,            .*//,.            /(((((          *(((((((((((/  ,((/          *(((((((((((((
-((((((((*((.                       ,(((((((                            ./((((((                    /(.  /(*            (((((((((((((
-(((((((/ /((*                        (((((((((/                       *(((((((*                    ((  ,(/             (((((((((((((
-(((((((/ /(((/,                      ./((((  .(/                   ./(((((((((.                   ,(*  /(/            *(((((((((((((
-(((((((/ /((((((/                  ,/((((((*  *(,               ./(((((((((((/                    //   (((*         .(((((((((((((((
-(((((((/ *((((((((((/*,.    .,*/((((((((((((.  ((((*,.    .,*((((((((((((((((((((((((((((((((((((((,  ,(((((/.  .,/(((((((((((((((((
-((((((((,.((((((((((((((((((((((((((((((/*,.      /((((((((((((((((((((((((((((((((((///**,,,*(((((   /((((((((((((. /((((((((((((((
-((((((((/ *(((((((((((((((((((((((((*  .,//((  .((((((((((((((((((((((((/*,..      ..,,*/////(((((*  *(((((((((((* ,((((((((((((((((
-(((((((((. ((((((((((((((((((((((((((/(((((((.  *,.    ,((((((((((*     .,*/((((((((((((((((((((((.  ((((((((((/ ./(((((((((((((((((
-(((((((((/ *(((((((((((((((((((((((((((/*.      ./(((((((*,,*(((((///((((((((((((((((((((((((((((/   ((((((((* ./(((((((((((((((((((
-((((((((((/ ,((((((((((((((((((((/,    ,*/((((.  (((((/  */.  /((((((((((((((((((((((((((((((((((///(((((((. ,((((((((((((((((((((((
-(((((((((((* *((((((((((((((/,   ,/(((((((((((/  *(((((//((   ///,,*(((((((((((((((((((((((((((.  .  /((*  /((((((((((((((((((((((((
-((((((((((((( .((((((((((,   *(((((((((((((((((.  /((((((*.   .*/((((((((((((((((((((((((((((/  .(.  ((**(((((((((((((((((((((((((((
-((((((((((((((, /((((((.  /((((((((((((((((((((/   ((/.  ,/((((((((((((((((((((((((((((((((((,      /(((((((((((((((((((((((((((((((
-(((((((((((((((* ,(((((((((((((((((((((((((((((((//((///((((((((((((((((((((((((((((((((((((((* .(((((((((((((((((((((((((((((((((((
-(((((((((((((((((, ,(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/,  /((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((* ./((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((*.  */(((((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((((/. ,((((((((((((((((((((((((((((((((((((((((((((((((((((((((((/*/((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((/  ,/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((((((((((/,  */(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((((((((((((((/,  .*/((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((/*.   .,*/(((((((((((((((((((((/*,.    ,((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((//*,.  ,/(((((((((*.  .*/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((((((((((((((((((((((((((((((((((/ ,(((((. ./(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((/ *(/  /((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((( ,  (((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((/  /((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-(((((((((((((((((((((((((((((((((((((((((((((((((((/ .((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((/(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
-'''
-
-warning = '''
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@@%########(((((((((((########%&@%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%####(/****************************//(####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%@%###(/*****************************,,,,,,,,,,*/###%@%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%##(/***************************,,,,,,,,,,,,,,,,,,,,*(##%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%##(/**************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*/##%@%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%@##(/**************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*(##%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%@##(**************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,/##&%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%##**************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(##%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%@##**************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(#%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%##/*************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*##%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%@##/************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*##%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%##************************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(#%%%%%%%%%%%%%%
-%%%%%%%%%%%%##/***********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,##@%%%%%%%%%%%
-%%%%%%%%%%%##/***********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,##&%%%%%%%%%%
-%%%%%%%%%@##/**********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(#%%%%%%%%%%
-%%%%%%%%(**********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(#%%%%%%%%%
-%%%%%%%%##**********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,##%%%%%%%%
-%%%%%%%##/********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*##%%%%%%%
-%%%%%%%#/********************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*#%%%%%%%
-%%%%%%##*******************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(#%%%%%%
-%%%%%##/******************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*##%%%%%
-%%%%%##*****************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,##%%%%%
-%%%%%#(****************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,(%#%%%%
-%%%%%#%#(/************,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*/#%#%%%%
-%%%%###%%%%%%#(/*****,,,,,,,,,,,,,,,,,,,,,,,/(,,,,,,,,*(/,,,,,/(***(/**,,,,,,,,,,,,,,,,,,,,,,,,,,,,,**/((#%%%%%%%%#@%%%
-%%##*****/(#%%%%%%%##(/*,,,,,,,,,,,,,,,,#%###(((%#*,/#%((%#*,/#(#(/#/#(,,,,,,,,,,,,,,,,,,,**/((##%%%%%%%%%##(/*,,,/##@%
-##**************//(##%%%%%%%%%%##(((//*,///%#////**#%##%%###/,/((#%##%/,/((((####(*#%%%%%%%%%%##((/*,,,,,,,,,,,,,,,,*##
-#(***************,,,,,,,**/((###%%%%%%#*((%#//%%//,,(##%%#(,,,#%(#%#((/,*/***,,,**,/((/***,,,,,,,,,,,,,,,,,,,,,,,,,,,/#
-%##(*************,,,,,,,,,,,,,,,,,,,,,,,,,(%%%%(*,,,**/%#****,(#%%%/*(%*,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*(#%
-%%%%###(/*******,,,,,,,,,,,,,,,,,,,,,,,,,,,**,,,*,,/********,,**,*/*,*,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*(###%%%
-%%%%%%%##%%#(/,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*/#%%##%%%%%%
-%%%%%@##,(%#%(*/(##(/*,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,*/(###/**%##%//##%%%%%
-%%%%@##,,/%###,,,,,,,*/(###((/**,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,**/((###(/*,,,,,,,/%###*,/##%%%%
-%%%%#/,,,/%##%*,,,,,,,,,,,,,*#,**/((##%##((///****,,,,,,,,,,,,,,,,,,,****///((#####(/*,...#/,,,,,,,,,,,,,#%#%#/,,,(#%%%
-%%##((#%//%##%#*,,,,,,,,,,,,*#((///(#%%(*,,(#,    ./(/..............      .,/##(/***//*,  #/,,,,,,,,,,,,*%##%%//##(###%
-%%%%%%##,,%%##%(,,,,,,,,,,,,,#,,,,/#,,#,(#/                                               #*,,,,,,,,,,,,#%##%#*,/##%%%%
-%%%%%%#/,,(%##%#,,,,,,,,,,,,,(#((,. .(#*.                                                .(,,,,,,,,,,,,(%##%%/,,,(#%%%%
-%%%%%##,,,*%%##%(,,,,,,*,,,,,*(.                                                         (*,,,,,*,,,,,*%###%#,,,,,#%%%%
-%%%%%#/,,,,(%###%*,,,,,#(#(//*#/                                                        ,%**/(#(#*,,,,#%##%%*,,,,,(#&%%
-%%%%#(*,,,,,/%##%#***,,#*,(*...                                                          ....(/*#*,**/%###%/,,,,,,*##%%
-%%%%#*,,,,,,,#%##%%#*(##*,(*                                                                .#/*##/,/%###%*,,,,,,,,(#%%
-%%%##,,,,,,,,*%%##%#,,,,,,((.                                                               /%/,,,,,*###%(,,,,,,,,,/#%%
-%%%#(,,,,,,,,,*###%(,,,,,,/%(.*((.                                                    *(/, .##*,,,,,*##%#,,,,,,,,,,*(#%
-%%%#/,,,,,,,,,,*%#%(,,,,,,*%%&&&&&*,.       ,*#,                      ((*.       .*(%&&&&&%%((,,,,,,*#%#/,,,,,,,,,,,(#%
-%%%#/,,,,,,,,,,,/%%#,,,,,,,##(#&&&&&&&&&%%%%&&&%,                      #&&&%%%%&&&&&&&&&%/*(//,,,,,,*##/*,,,,,,,,,,,(#%
-%%%#/,,,,,,,,,,,,/##,,,,,,,(##. ./#%&&&&&&&&%(.                          *#%&&&&&&&&%#*.  #/(,,,,,,,/#/*,,,,,,,,,,,,(#%
-%%%#(,,,,,,,,,,,,*/#,,,,,,,*#(*     .,%(,....                               ...*#/........(/(,,,,,,,/#/,,,,,,,,,,,,*##%
-%%%%#,,,,,,,,,,,,,*#*,,,,,,,*%(.   ..........                                ............/%%*,,,,,,,(#*,,,,,,,,,,,,(#%%
-%%%%#(,,,,,,,,,,,,,(/,,,,,,,,(%(    .........                                  ........ .%#/,,,,,,,,#/,,,,,,,,,,,,*##%%
-%%%%%#(,,,,,*/,,,,,*#,,,,,,,,,#%,     .....                                       ..   ./%/,,,,,,,,*#*,,,,*(,,,,,,##%%%
-%%%%%%##,,,,,##(,,,,#*,,,,,,,,,(%.                                                    .#%/,,,,,,,,,#*,,,,#%(,,,,/##%%%%
-%%%%%%%##(,,,*###/,,*#*,,,,,,,,,#%(.                    ... ....                     ,#%(,,,,,,,,,*#,,*###(*,,,(#%%%%%%
-%%%%%%%%%##(*,*####(,/#,,,,,,,,,,(%%(,              .**..       .*/.              ./%%%*,,,,,,,,,,#,/####(,,*##%%%%%%%%
-%%%%%%%%%%%%###(###%####*,,,,,,,,,,/%%%%(*.                                  .,/#%#%#/,,,,,,,,,,(###%%##((###%%%%%%%%%%
-%%%%%%%%%%%%%%%####%%%%##(,,,,,,,,,,,*#%%%%%%#/*.                      .,/#%%%#%%%(,,,,,,,,,,,,##%%%%%###%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%##/,,,,,,,,,,,,,*(%%#%%%%%%##(////////*/((#%%%%%##%%#/,,,,,,,,,,,,,,(#%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%###(*,,*%#####(%%###%%%%%%%#%%&@&&@&&%#%%%%%%%####%%%####%%,,,*###%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%###((###%%##%##########%#(#%%%%#((#%##########%%##%##((####%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
+import pyfile.strfile as st
 
 # Initialisation section (IMPORTANT: DO NOT MOVE)
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
-## Root dir
+# Dir variables
 ori = os.getcwd()
+procLoc=os.path.join(ori,'ProcessingFolder')
+extLoc=os.path.join(ori,'Extracted')
+pullLoc=os.path.join(ori,'Sound')
+AndroidLoc="/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/."
 
-# Variables section
-sudoAPT=['sudo', 'apt', 'install']
-sudoNoPrompt=['-y']
+# General variables
+sudoAPT = ['sudo', 'apt', 'install']
+sudoNoPrompt = ['-y']
+wineUbuntu = 'wine-stable'
+wineDevUbuntu = 'wine-development'
+wineAdd = 'winetricks'
+mp3='lame'
 
 # Program argument section
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
@@ -229,12 +54,11 @@ parser.add_argument('-n', action='store_true', dest='nat',
 
 args = parser.parse_args()
 
-# Function section
 def PreProcessing(val):
     folders = []
 
-    if os.path.exists(os.path.join(ori, 'ProcessingFolder')):
-        for r, d, f in os.walk(os.path.join(os.getcwd(), 'ProcessingFolder')):
+    if os.path.exists(procLoc):
+        for r, d, f in os.walk(procLoc):
             for folder in d:
                 folders.append(os.path.join(r, folder))
 
@@ -242,22 +66,23 @@ def PreProcessing(val):
         for fi in os.listdir(f):
             if os.path.splitext(fi)[1].lower() == '.wav':
                 if val == 0:
-                    print(warningpre1 % warning)
-                    print(warningpre2)
+                    print(st.warningpre1 % st.warning)
+                    print(st.warningpre2)
                 elif val == 1:
-                    print(warningpost1 % warning)
-                    print(warningpost2)
+                    print(st.warningpost1 % st.warning)
+                    print(st.warningpost2)
                 sys.exit(0)
 
-    if os.path.exists(os.path.join(ori, 'ProcessingFolder')):
-        shutil.rmtree(os.path.join(ori, 'ProcessingFolder'))
-    os.makedirs(os.path.join(ori, 'ProcessingFolder'))
+    if os.path.exists(procLoc):
+        shutil.rmtree(procLoc)
+    os.makedirs(procLoc)
+
 
 def ADBexec(init=0):
     folders = []
 
     if not init:
-        for r, d, f in os.walk(os.path.join(os.getcwd(), 'Sound')):
+        for r, d, f in os.walk(pullLoc):
             for folder in d:
                 if os.listdir(os.path.join(r, folder)):
                     folders.append(os.path.join(r, folder))
@@ -272,38 +97,33 @@ def ADBexec(init=0):
     for i in range(5, 0, -1):
         print(i, end='\r')
         time.sleep(1)
-    print(0,end='\n\n')
+    print(0, end='\n\n')
 
     if platform.system() == 'Windows':
-        x = subprocess.call([os.path.join(os.getcwd(), 'platform-tools', 'win', 'adb.exe'), 'pull',
-                             "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.", os.path.realpath(os.path.join(os.getcwd(), 'Sound'))])
+        x = subprocess.call([os.path.join(ori, 'platform-tools', 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
         if x:
             t = 3
             for i in range(t):
                 print(
                     "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
                 time.sleep(5)
-                x = subprocess.call([os.path.join(os.getcwd(), 'platform-tools', 'win', 'adb.exe'), 'pull',
-                                     "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.", os.path.realpath(os.path.join(os.getcwd(), 'Sound'))])
+                x = subprocess.call([os.path.join(ori, 'platform-tools', 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
                 if not x:
                     break
 
     elif platform.system() == 'Darwin':
-        x = subprocess.call([os.path.join(os.getcwd(), 'platform-tools', 'mac', 'adb'), 'pull',
-                             "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.", os.path.realpath(os.path.join(os.getcwd(), 'Sound'))])
+        x = subprocess.call([os.path.join(ori, 'platform-tools', 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
     elif platform.system() == 'Linux':
         subprocess.call(
-            ['chmod', '+x', os.path.join(os.getcwd(), 'platform-tools', 'linux', 'adb')])
-        x = subprocess.call([os.path.join(os.getcwd(), 'platform-tools', 'linux', 'adb'), 'pull',
-                             "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.", os.path.realpath(os.path.join(os.getcwd(), 'Sound'))])
+            ['chmod', '+x', os.path.join(ori, 'platform-tools', 'linux', 'adb')])
+        x = subprocess.call([os.path.join(ori, 'platform-tools', 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
         if x:
             t = 3
             for i in range(t):
                 print(
                     "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
                 time.sleep(5)
-                x = subprocess.call([os.path.join(os.getcwd(), 'platform-tools', 'linux', 'adb'), 'pull',
-                                     "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/.", os.path.realpath(os.path.join(os.getcwd(), 'Sound'))])
+                x = subprocess.call([os.path.join(ori, 'platform-tools', 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
                 if not x:
                     break
 
@@ -321,7 +141,7 @@ def ADBexec(init=0):
 
     if init:
         folderpost = []
-        for r, d, f in os.walk(os.path.join(os.getcwd(), 'Sound')):
+        for r, d, f in os.walk(pullLoc):
             for folder in d:
                 if os.listdir(os.path.join(r, folder)):
                     folderpost.append(os.path.join(r, folder))
@@ -336,7 +156,7 @@ def ADBexec(init=0):
     else:
         # Gets updated folders only
         folderpost = []
-        for r, d, f in os.walk(os.path.join(os.getcwd(), 'Sound')):
+        for r, d, f in os.walk(pullLoc):
             for folder in d:
                 if os.listdir(os.path.join(r, folder)) and os.path.join(r, folder) not in folders:
                     folderpost.append(os.path.join(r, folder))
@@ -359,11 +179,11 @@ def ADBexec(init=0):
                     print(os.path.join(f, fi))
                     g.write(os.path.join(f, fi))
                     g.write("\n")
-                    if not os.path.isdir(os.path.join(ori, 'ProcessingFolder', os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), '')):
-                        os.mkdir(os.path.join(ori, 'ProcessingFolder', os.path.basename(
+                    if not os.path.isdir(os.path.join(procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), '')):
+                        os.mkdir(os.path.join(procLoc, os.path.basename(
                             os.path.join(f, os.path.splitext(fi)[0])), ''))
                     shutil.copy(os.path.join(f, fi), os.path.join(
-                        ori, 'ProcessingFolder', os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), ''))
+                        procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), ''))
     else:
         g.write("<NIL>\n")
         print("No new files added!")
@@ -375,8 +195,9 @@ def ADBexec(init=0):
     g.flush()
     g.close()
 
+
 def ACB2WAV():
-    for r, d, f in os.walk(os.path.join(ori, 'ProcessingFolder')):
+    for r, d, f in os.walk(procLoc):
         for l in d:
             for s in os.listdir(os.path.join(r, l)):
                 if os.path.splitext(s)[1].lower() in ['.acb']:
@@ -387,7 +208,7 @@ def ACB2WAV():
                         subprocess.call(['wine', os.path.join(
                             ori, 'deretore', 'Release', 'acbUnzip.exe'), os.path.join(r, l, s)])
 
-    for r, d, f in os.walk(os.path.join(ori, 'ProcessingFolder')):
+    for r, d, f in os.walk(procLoc):
         for l in d:
             for s in os.listdir(os.path.join(r, l)):
                 if os.path.splitext(s)[1].lower() in ['.hca']:
@@ -398,11 +219,12 @@ def ACB2WAV():
                         subprocess.call(['wine', os.path.join(
                             ori, 'deretore', 'Release', 'hca2wav.exe'), os.path.join(r, l, s)])
 
+
 def copyF(fol):
-    for f in os.listdir(os.path.join(ori, 'ProcessingFolder')):
+    for f in os.listdir(procLoc):
         for r, d, f2 in os.walk(fol):
             if f in d:
-                for r2, d2, f3 in os.walk(os.path.join(ori, 'ProcessingFolder', f)):
+                for r2, d2, f3 in os.walk(os.path.join(procLoc, f)):
                     for f4 in f3:
                         if os.path.splitext(f4)[1].lower() in ['.wav']:
                             x = 1
@@ -420,6 +242,7 @@ def copyF(fol):
                                 shutil.move(os.path.join(r2, f4),
                                             os.path.join(r, f, f4))
 
+
 def updateFolder(src, dst):
     for i in os.listdir(src):
         if os.path.isdir(os.path.join(src, i)) and len(i) < 40:
@@ -428,6 +251,7 @@ def updateFolder(src, dst):
                 print(os.path.join(dst, i))
             updateFolder(os.path.join(src, i), os.path.join(dst, i))
 
+
 def extractfolder(fol, fpath=False):
     if fpath == False:
         if not os.path.exists(os.path.join(ori, fol)):
@@ -435,67 +259,70 @@ def extractfolder(fol, fpath=False):
     else:
         os.makedirs(fol)
 
-print(subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y']))
-sys.exit(0)
+
+#print(subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y']))
+# sys.exit(0)
+
 
 # Pre-req check
 # https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
 if 'ubuntu' in platform.platform().lower():
     import apt
     cache = apt.Cache()
-    pkg1 = cache['wine-stable']
-    pkg2 = cache['wine-development']
-    pkg3 = cache['winetricks']
+    pkg1 = cache[wineUbuntu]
+    pkg2 = cache[wineDevUbuntu]
+    pkg3 = cache[wineAdd]
     x = 0
     if not pkg1.is_installed and not pkg2.is_installed:
         x += 1
-        print(p1NI)
+        print(st.p1NI)
         time.sleep(10)
-        subprocess.call(['sudo', 'apt', 'install', 'wine-stable','-y'])
+        subprocess.call(sudoAPT+[wineUbuntu]+sudoNoPrompt)
     else:
-        print(p1AI,end="")
+        print(st.p1AI, end="")
     if not pkg3.is_installed:
         if not x:
             print()
             time.sleep(10)
         else:
-            print(p2NI)
+            print(st.p2NI)
             time.sleep(5)
-        subprocess.call(['sudo', 'apt', 'install', 'winetricks','-y'])
+        subprocess.call(sudoAPT+[wineAdd]+sudoNoPrompt)
     else:
-        print(p2AI,end="")
-    f = subprocess.Popen(['winetricks', 'list-installed'], stdout=PIPE)
+        print(st.p2AI, end="")
+    f = subprocess.Popen([wineAdd]+['list-installed'],
+                         stdout=subprocess.PIPE)
     a = f.communicate()
     if not ('dotnet45' in str(a)):
         print()
         time.sleep(5)
-        subprocess.call(['winetricks', 'dotnet45'])
+        subprocess.call([wineAdd] +['dotnet45'])
     else:
-        print(p3AI,end="")
+        print(st.p3AI, end="")
     if args.nat == True:
-        pkg4 = cache['lame']
+        pkg4 = cache[mp3]
         if not pkg4.is_installed:
-            print(p4NI)
+            print(st.p4NI)
             time.sleep(10)
-            subprocess.call(['sudo', 'apt', 'install', 'lame','-y'])
+            subprocess.call(sudoAPT+[mp3]+ sudoNoPrompt)
         else:
-            print(p4AI,end="")
-    print(pOK)
+            print(st.p4AI, end="")
+    print(st.pOK)
 elif platform.system() == 'Windows':
     pass
 elif 'centos' in platform.platform().lower():
-    #Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
-    #https://stackoverflow.com/questions/567542/running-a-command-as-a-super-user-from-a-python-script
-    x=subprocess.call(['sudo','dnf','install','epel-release'])
+    # Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
+    # https://stackoverflow.com/questions/567542/running-a-command-as-a-super-user-from-a-python-script
+    x = subprocess.call(['sudo', 'dnf', 'install', 'epel-release'])
     if x:
-        print(sudoProb)
-    #Edited visudo with <user> ALL=(ALL) ALL
+        print(st.sudoProb)
+    # Edited visudo with <user> ALL=(ALL) ALL
     sys.exit(0)
 else:
-    print(noSup)
+    print(st.noSup)
     sys.exit(0)
 
-print(welcome % icon)
+print(st.welcome % st.icon)
 
 PreProcessing(0)
 os.chdir(ori)
@@ -526,7 +353,7 @@ PreProcessing(1)
 
 if (args.conv):
     if args.Out == None or args.Out == False:
-        for r, d, f in os.walk(os.path.join(ori, 'Extracted')):
+        for r, d, f in os.walk(extLoc):
             for l in d:
                 for s in os.listdir(os.path.join(r, l)):
                     if os.path.splitext(s)[1].lower() in ['.wav']:
@@ -543,15 +370,17 @@ if (args.conv):
                                 pass  # For mac
                             elif platform.system() == "Linux":
                                 if args.nat:
-                                    subprocess.call(['lame', os.path.join(r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
+                                    subprocess.call(['lame', os.path.join(r, l, s), os.path.splitext(
+                                        os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
                                 else:
-                                    subprocess.call(['wine', os.path.join(ori, 'lame', 'win32', 'lame.exe'), os.path.join(r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
+                                    subprocess.call(['wine', os.path.join(ori, 'lame', 'win32', 'lame.exe'), os.path.join(
+                                        r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
 
 if (args.Del):
-    for r, d, f in os.walk(os.path.join(ori, 'Extracted')):
+    for r, d, f in os.walk(extLoc):
         for src in d:
-            for l in os.listdir(os.path.join(r,src)):
+            for l in os.listdir(os.path.join(r, src)):
                 if os.path.splitext(l)[1].lower() in ['.wav']:
-                    os.remove(os.path.join(r,src,l))
+                    os.remove(os.path.join(r, src, l))
 
 print("Complete! Log file is in the root directory.")
