@@ -18,10 +18,12 @@ All copyright from the use of the programs mentioned goes to the respective copy
 ## Requirements
 
 - Python 3
+- .NET Framework 4.5
 - Wine (For Mac/Linux)
     - Ubuntu instructions:
         - apt install wine-stable winetricks
-        - winetricks dotnet45
+
+\**Where possible, the script checks for the existence of the installed programs*
 
 ## Use
 

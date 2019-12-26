@@ -59,11 +59,35 @@ noSup="""
 ====================================================================================
 Support for Linux/Mac is not available yet!
 ===================================================================================="""
+windotNET45="""====================================================================================
+.NET Framework 4.5 has not been detected on the system, preparing to install.
+Commencing installation in 10s.
+
+If there is an error before installation, enable .NET Framework via Control Panel by
+1) Opening Control Panel → Turn Windows features on or off
+
+OR
+
+2) Open command prompt / Powershell → type "appwiz.cpl" → Turn Windows features on or off
+
+OR
+
+3) Press keys "Win + R" → type "appwiz.cpl" → Turn Windows features on or off
+
+OR
+
+4) Search "appwiz.cpl" in the taskbar / Start Menu → Turn Windows features on or off
+====================================================================================
+"""
 welcome="%s\nWelcome to CUE! Audio puller!\n"
 warningpre1="%s\nThere are still .wav files in ProcessingFolder folder, program will terminate!"
 warningpre2="To make this error disappear, remove all .wav files from the ProcessingFolder folder\n"
 warningpost1="%s\nThe program is unable to copy all the .wav files into the destination folders."
 warningpost2="Please remove all .wav files from the ProcessingFolder folder before next execution\n"
+br="-----------------------------------------------\n"
+Tbr="\n-------------------------------------------------------------------------------------------------------------------------\n"
+Fbr="-------------------------------------------------------------------------------------------------------------------------\n"
+
 icon = '''
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
 ((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((
