@@ -321,27 +321,30 @@ def preCheck():
     elif 'debian' in platform.platform().lower():
         if 'debian-10' in platform.platform().lower():
             import apt
-            os.environ['WINEARCH']= "win32"
-            os.environ['WINEPREFIX']="~/.winedotnet45"
-            subprocess.call(['wineboot','-u'])
             cache = apt.Cache()
             pkg1 = cache['wine']
-            pkg2 = cache['wine32:i386']
-            pkg3 = cache[wineAdd]
-            if not pkg1.is_installed:
-                print(st.p1NI)
-                time.sleep(10)
-                x = subprocess.call(['sudo', 'add-apt-repository', 'contrib'])
-                if x:
-                    print(st.sudoProbDeb10)
-                    sys.exit(0)
-                subprocess.call(['sudo', 'add-apt-repository', 'non-free'])
-                subprocess.call(['sudo','dpkg','-add-architecture','i386'])
-                subprocess.call(['sudo', 'apt', 'update', '-y'])
-                #askubuntu.com/questions/1090094/wine-missing-ntlm-auth-3-0-25
-                subprocess.call(['sudo', 'apt', 'install', 'wine', 'winbind','-y'])
-            else:
-                print(st.p1AI, end="")
+            pkg3=cache[wineAdd]
+            try:
+                pkg2 = cache['wine32:i386']
+            except:
+                if not pkg1.is_installed:
+                    print(st.p1NI)
+                    time.sleep(10)
+                    x = subprocess.call(['sudo', 'add-apt-repository', 'contrib'])
+                    '''
+                    if x:
+                        print(st.sudoProbDeb10)
+                        os._exit(0)
+                        '''
+                    subprocess.call(['sudo', 'add-apt-repository', 'non-free'])
+                    subprocess.call(['sudo','dpkg','--add-architecture','i386'])
+                    subprocess.call(['sudo', 'apt', 'update', '-y'])
+                    #askubuntu.com/questions/1090094/wine-missing-ntlm-auth-3-0-25
+                    #Prompt to tell user to click next only
+                    subprocess.call(['sudo', 'apt', 'install', 'wine', 'winbind','-y'])
+                    pkg2 = cache['wine32:i386']
+                else:
+                    print(st.p1AI, end="")
             if not pkg2.is_installed:
                 subprocess.call(['sudo', 'apt', 'install', 'wine32','-y'])
             if not pkg3.is_installed:
@@ -358,8 +361,11 @@ def preCheck():
                              stdout=subprocess.PIPE)
             a = f.communicate()
             if ('dotnet45' in str(a)):
-                print()
+                print(st.p3NI)
                 time.sleep(5)
+                os.environ['WINEARCH']= "win32"
+                os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet45"
+                subprocess.call(['wineboot','-u'])
                 subprocess.call([wineAdd] + ['dotnet45'])
             else:
                 print(st.p3AI, end="")
