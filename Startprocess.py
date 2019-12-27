@@ -360,7 +360,7 @@ def preCheck():
             f = subprocess.Popen([wineAdd]+['list-installed'],
                              stdout=subprocess.PIPE)
             a = f.communicate()
-            if ('dotnet45' in str(a)):
+            if not ('dotnet45' in str(a)):
                 print(st.p3NI)
                 time.sleep(5)
                 os.environ['WINEARCH']= "win32"
