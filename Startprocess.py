@@ -323,7 +323,6 @@ def preCheck():
             import apt
             cache = apt.Cache()
             pkg1 = cache['wine']
-            pkg3=cache[wineAdd]
             try:
                 pkg2 = cache['wine32:i386']
             except:
@@ -331,11 +330,9 @@ def preCheck():
                     print(st.p1NI)
                     time.sleep(10)
                     x = subprocess.call(['sudo', 'add-apt-repository', 'contrib'])
-                    '''
                     if x:
                         print(st.sudoProbDeb10)
                         os._exit(0)
-                        '''
                     subprocess.call(['sudo', 'add-apt-repository', 'non-free'])
                     subprocess.call(['sudo','dpkg','--add-architecture','i386'])
                     subprocess.call(['sudo', 'apt', 'update', '-y'])
@@ -345,8 +342,11 @@ def preCheck():
                     pkg2 = cache['wine32:i386']
                 else:
                     print(st.p1AI, end="")
+            cache = apt.Cache()
+            pkg2 = cache['wine32:i386']
             if not pkg2.is_installed:
                 subprocess.call(['sudo', 'apt', 'install', 'wine32','-y'])
+            pkg3=cache[wineAdd]
             if not pkg3.is_installed:
                 if not x:
                     print(st.p3NI)
