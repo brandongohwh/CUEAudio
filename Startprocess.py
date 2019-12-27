@@ -341,7 +341,6 @@ def preCheck():
                     subprocess.call(['sudo', 'apt', 'install', 'wine', 'winbind','-y'])
                 else:
                     print(st.p1AI, end="")
-            time.sleep(5)
             cache = apt.Cache()
             pkg2 = cache['wine32:i386']
             if not pkg2.is_installed:
