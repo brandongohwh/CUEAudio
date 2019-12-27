@@ -304,9 +304,9 @@ def preCheck():
                              stdout=subprocess.PIPE)
         a = f.communicate()
         if not ('dotnet45' in str(a)):
-            print()
+            print(st.p3NI)
             time.sleep(5)
-            subprocess.call([wineAdd] + ['dotnet45'])
+            subprocess.call([wineAdd] + ['--force','dotnet45'])
         else:
             print(st.p3AI, end="")
         if args.nat == True:
@@ -321,24 +321,32 @@ def preCheck():
     elif 'debian' in platform.platform().lower():
         if 'debian-10' in platform.platform().lower():
             import apt
+            os.environ['WINEARCH']= "win32"
+            os.environ['WINEPREFIX']="~/.winedotnet45"
+            subprocess.call(['wineboot','-u'])
             cache = apt.Cache()
             pkg1 = cache['wine']
+            pkg2 = cache['wine32:i386']
             pkg3 = cache[wineAdd]
             if not pkg1.is_installed:
-              print(st.p1NI)
-              time.sleep(10)
+                print(st.p1NI)
+                time.sleep(10)
                 x = subprocess.call(['sudo', 'add-apt-repository', 'contrib'])
                 if x:
                     print(st.sudoProbDeb10)
                     sys.exit(0)
                 subprocess.call(['sudo', 'add-apt-repository', 'non-free'])
+                subprocess.call(['sudo','dpkg','-add-architecture','i386'])
                 subprocess.call(['sudo', 'apt', 'update', '-y'])
-                subprocess.call(['sudo', 'apt', 'install', 'wine', '-y'])
+                #askubuntu.com/questions/1090094/wine-missing-ntlm-auth-3-0-25
+                subprocess.call(['sudo', 'apt', 'install', 'wine', 'winbind','-y'])
             else:
                 print(st.p1AI, end="")
+            if not pkg2.is_installed:
+                subprocess.call(['sudo', 'apt', 'install', 'wine32','-y'])
             if not pkg3.is_installed:
                 if not x:
-                    print()
+                    print(st.p3NI)
                     time.sleep(10)
                 else:
                     print(st.p2NI)
@@ -349,7 +357,7 @@ def preCheck():
             f = subprocess.Popen([wineAdd]+['list-installed'],
                              stdout=subprocess.PIPE)
             a = f.communicate()
-            if not ('dotnet45' in str(a)):
+            if ('dotnet45' in str(a)):
                 print()
                 time.sleep(5)
                 subprocess.call([wineAdd] + ['dotnet45'])
