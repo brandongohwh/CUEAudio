@@ -54,6 +54,20 @@ Save and quit by pressing ESC, then typing in ':wq' and hit ENTER.
 
 Restart your system to have the changes take effect.
 ===================================================================================="""
+sudoProbDeb10="""
+====================================================================================
+You may need to add your username to the sudoers file!
+
+Run the following command:
+su
+vi /etc/sudoers
+
+On the last line, add '<username> ALL=(ALL:ALL) ALL'
+
+Save and quit by pressing ESC, then typing in ':wq' and hit ENTER.
+
+Restart your system to have the changes take effect.
+===================================================================================="""
 noSup="""
 
 ====================================================================================

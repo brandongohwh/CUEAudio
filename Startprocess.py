@@ -20,18 +20,20 @@ dname = os.path.dirname(abspath)
 os.chdir(dname)
 
 # Dir variables
-## Fixed dir
+# Fixed dir
 ori = os.getcwd()
-procLoc=os.path.join(ori,'ProcessingFolder')
-extLoc=os.path.join(ori,'Extracted')
-pullLoc=os.path.join(ori,'Sound')
-adbPre=os.path.join(ori, 'platform-tools')
-mp3Pre=os.path.join(ori, 'lame')
-dere=os.path.join(ori, 'deretore', 'Release')
-AndroidLoc="/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/."
-dotNET45x86=os.path.join('C:/','Windows','Microsoft.NET','Framework','v4.0.30319')
-dotNET45x64=os.path.join('C:/','Windows','Microsoft.NET','Framework64','v4.0.30319')
-## Relative dir
+procLoc = os.path.join(ori, 'ProcessingFolder')
+extLoc = os.path.join(ori, 'Extracted')
+pullLoc = os.path.join(ori, 'Sound')
+adbPre = os.path.join(ori, 'platform-tools')
+mp3Pre = os.path.join(ori, 'lame')
+dere = os.path.join(ori, 'deretore', 'Release')
+AndroidLoc = "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Sound/."
+dotNET45x86 = os.path.join(
+    'C:/', 'Windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')
+dotNET45x64 = os.path.join(
+    'C:/', 'Windows', 'Microsoft.NET', 'Framework64', 'v4.0.30319')
+# Relative dir
 fol = 'Extracted'
 
 # General variables
@@ -40,7 +42,7 @@ sudoNoPrompt = ['-y']
 wineUbuntu = 'wine-stable'
 wineDevUbuntu = 'wine-development'
 wineAdd = 'winetricks'
-mp3='lame'
+mp3 = 'lame'
 
 # Program argument section
 parser = argparse.ArgumentParser(description='CUE! Audio Puller')
@@ -59,6 +61,7 @@ parser.add_argument('-n', action='store_true', dest='nat',
                     help='Use Native apps where available (Only Ubuntu)')
 
 args = parser.parse_args()
+
 
 def PreProcessing(val):
     folders = []
@@ -105,30 +108,35 @@ def ADBexec(init=0):
     print(0, end='\n\n')
 
     if platform.system() == 'Windows':
-        x = subprocess.call([os.path.join(adbPre, 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
+        x = subprocess.call(
+            [os.path.join(adbPre, 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
         if x:
             t = 3
             for i in range(t):
                 print(
                     "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
                 time.sleep(5)
-                x = subprocess.call([os.path.join(adbPre, 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
+                x = subprocess.call(
+                    [os.path.join(adbPre, 'win', 'adb.exe'), 'pull', AndroidLoc, pullLoc])
                 if not x:
                     break
 
     elif platform.system() == 'Darwin':
-        x = subprocess.call([os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
+        x = subprocess.call(
+            [os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
     elif platform.system() == 'Linux':
         subprocess.call(
             ['chmod', '+x', os.path.join(adbPre, 'linux', 'adb')])
-        x = subprocess.call([os.path.join(adbPre, 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
+        x = subprocess.call(
+            [os.path.join(adbPre, 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
         if x:
             t = 3
             for i in range(t):
                 print(
                     "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
                 time.sleep(5)
-                x = subprocess.call([os.path.join(adbPre, 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
+                x = subprocess.call(
+                    [os.path.join(adbPre, 'linux', 'adb'), 'pull', AndroidLoc, pullLoc])
                 if not x:
                     break
     if x:
@@ -184,8 +192,10 @@ def ADBexec(init=0):
                     g.write(os.path.join(f, fi))
                     g.write("\n")
                     if not os.path.isdir(os.path.join(procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), '')):
-                        os.mkdir(os.path.join(procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), ''))
-                    shutil.copy(os.path.join(f, fi), os.path.join(procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), ''))
+                        os.mkdir(os.path.join(procLoc, os.path.basename(
+                            os.path.join(f, os.path.splitext(fi)[0])), ''))
+                    shutil.copy(os.path.join(f, fi), os.path.join(
+                        procLoc, os.path.basename(os.path.join(f, os.path.splitext(fi)[0])), ''))
     else:
         g.write("<NIL>\n")
         print("No new files added!")
@@ -205,18 +215,20 @@ def ACB2WAV():
                         subprocess.call(
                             [os.path.join(dere, 'acbUnzip.exe'), os.path.join(r, l, s)])
                     elif platform.system() == 'Linux':
-                        subprocess.call(['wine', os.path.join(dere, 'acbUnzip.exe'), os.path.join(r, l, s)])
+                        subprocess.call(['wine', os.path.join(
+                            dere, 'acbUnzip.exe'), os.path.join(r, l, s)])
 
     for r, d, f in os.walk(procLoc):
         for l in d:
             for s in os.listdir(os.path.join(r, l)):
                 if os.path.splitext(s)[1].lower() in ['.hca']:
-                    print("Processing %s"% os.path.join(r,l,s))
+                    print("Processing %s" % os.path.join(r, l, s))
                     if platform.system() == 'Windows':
                         subprocess.call(
                             [os.path.join(dere, 'hca2wav.exe'), os.path.join(r, l, s)])
                     elif platform.system() == 'Linux':
-                        subprocess.call(['wine', os.path.join(dere, 'hca2wav.exe'), os.path.join(r, l, s)])
+                        subprocess.call(['wine', os.path.join(
+                            dere, 'hca2wav.exe'), os.path.join(r, l, s)])
 
 
 def copyF(fol):
@@ -258,6 +270,7 @@ def extractfolder(fol, fpath=False):
     else:
         os.makedirs(fol)
 
+
 def preCheck():
     # Pre-req check
     # https://askubuntu.com/questions/578257/how-to-get-the-package-description-using-python-apt
@@ -271,7 +284,9 @@ def preCheck():
         if not pkg1.is_installed and not pkg2.is_installed:
             x += 1
             print(st.p1NI)
+            # Checking repo -> Need to provide print statement
             time.sleep(10)
+            subprocess.call(['sudo', 'apt', 'update', '-y'])
             subprocess.call(sudoAPT+[wineUbuntu]+sudoNoPrompt)
         else:
             print(st.p1AI, end="")
@@ -286,12 +301,12 @@ def preCheck():
         else:
             print(st.p2AI, end="")
         f = subprocess.Popen([wineAdd]+['list-installed'],
-                            stdout=subprocess.PIPE)
+                             stdout=subprocess.PIPE)
         a = f.communicate()
         if not ('dotnet45' in str(a)):
             print()
             time.sleep(5)
-            subprocess.call([wineAdd] +['dotnet45'])
+            subprocess.call([wineAdd] + ['dotnet45'])
         else:
             print(st.p3AI, end="")
         if args.nat == True:
@@ -299,17 +314,62 @@ def preCheck():
             if not pkg4.is_installed:
                 print(st.p4NI)
                 time.sleep(10)
-                subprocess.call(sudoAPT+[mp3]+ sudoNoPrompt)
+                subprocess.call(sudoAPT+[mp3] + sudoNoPrompt)
             else:
                 print(st.p4AI, end="")
         print(st.pOK)
     elif 'debian' in platform.platform().lower():
-        pass
+        if 'debian-10' in platform.platform().lower():
+            import apt
+            cache = apt.Cache()
+            pkg1 = cache['wine']
+            pkg3 = cache[wineAdd]
+            if not pkg1.is_installed:
+              print(st.p1NI)
+              time.sleep(10)
+                x = subprocess.call(['sudo', 'add-apt-repository', 'contrib'])
+                if x:
+                    print(st.sudoProbDeb10)
+                    sys.exit(0)
+                subprocess.call(['sudo', 'add-apt-repository', 'non-free'])
+                subprocess.call(['sudo', 'apt', 'update', '-y'])
+                subprocess.call(['sudo', 'apt', 'install', 'wine', '-y'])
+            else:
+                print(st.p1AI, end="")
+            if not pkg3.is_installed:
+                if not x:
+                    print()
+                    time.sleep(10)
+                else:
+                    print(st.p2NI)
+                    time.sleep(5)
+                subprocess.call(sudoAPT+[wineAdd]+sudoNoPrompt)
+            else:
+                print(st.p2AI, end="")
+            f = subprocess.Popen([wineAdd]+['list-installed'],
+                             stdout=subprocess.PIPE)
+            a = f.communicate()
+            if not ('dotnet45' in str(a)):
+                print()
+                time.sleep(5)
+                subprocess.call([wineAdd] + ['dotnet45'])
+            else:
+                print(st.p3AI, end="")
+            if args.nat == True:
+                pkg4 = cache[mp3]
+                if not pkg4.is_installed:
+                    print(st.p4NI)
+                    time.sleep(10)
+                    subprocess.call(sudoAPT+[mp3] + sudoNoPrompt)
+                else:
+                    print(st.p4AI, end="")
+            print(st.pOK)
     elif platform.system() == 'Windows':
         if not (os.path.exists(dotNET45x86) or os.path.exists(dotNET45x64)):
             print(st.windotNET45)
             time.sleep(10)
-            subprocess.call([os.path.join(ori,'installer','dotNetFx45_Full_setup.exe')],shell=True)
+            subprocess.call(
+                [os.path.join(ori, 'installer', 'dotNetFx45_Full_setup.exe')], shell=True)
     elif 'centos' in platform.platform().lower():
         # Due to sickening documentation for Fedora/CentOS/RHEL and lack of packages from default repo, going to use brute-force method
         # https://stackoverflow.com/questions/567542/running-a-command-as-a-super-user-from-a-python-script
@@ -321,6 +381,7 @@ def preCheck():
     else:
         print(st.noSup)
         sys.exit(0)
+
 
 def folFile():
     # extractFolder -> Create root extraction folder
@@ -337,8 +398,10 @@ def folFile():
                 copyF(args.Out)
             else:
                 extractfolder(args.Out)
-                updateFolder(os.path.join(ori, args.Out), os.path.join(ori, fol))
+                updateFolder(os.path.join(ori, args.Out),
+                             os.path.join(ori, fol))
                 copyF(os.path.join(ori, args.Out))
+
 
 def convFile():
     if args.Out == None or args.Out == False:
@@ -365,12 +428,14 @@ def convFile():
                                     subprocess.call(['wine', os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
                                         r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
 
+
 def delWAV():
     for r, d, f in os.walk(extLoc):
         for src in d:
             for l in os.listdir(os.path.join(r, src)):
                 if os.path.splitext(l)[1].lower() in ['.wav']:
                     os.remove(os.path.join(r, src, l))
+
 
 preCheck()
 print(st.welcome % st.icon)
@@ -391,4 +456,4 @@ if (args.conv):
 if (args.Del):
     delWAV()
 
-print("Complete! Log file is in %s"%ori)
+print("Complete! Log file is in %s" % ori)
