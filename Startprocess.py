@@ -354,7 +354,7 @@ def preCheck():
             else:
                 print(st.p2AI, end="")
             os.environ['WINEARCH']= "win32"
-            os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet45"
+            os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
             subprocess.call(['wineboot','-u'])
             f = subprocess.Popen([wineAdd]+['list-installed'],
                              stdout=subprocess.PIPE)
