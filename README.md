@@ -1,6 +1,6 @@
 # CUE! - See You Everyday Audio Puller
 
-Pulls audio from CUE! and processes it into WAV/MP3 files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```startprocess.py``` and ```adbpull.bat``` files.
+Pulls audio from CUE! and processes it into WAV/MP3 files. This code is also **extendible** to games that use HCA/ACB/AWB compression. Only thing to edit is the directory names in the ```Startprocess.py``` ~~and ```adbpull.bat```~~ files.
 
 ## Acknowledgements
 
@@ -18,10 +18,16 @@ All copyright from the use of the programs mentioned goes to the respective copy
 ## Requirements
 
 - Python 3
-- Wine (For Mac/Linux)
-    - Ubuntu instructions:
-        - apt install wine-stable winetricks
-        - winetricks dotnet45
+- .NET Framework 4.5
+- Wine (For Linux)
+
+\**For Ubuntu, Debian 10 and Windows, checks are in place to make sure that .NET Framework 4.5 is installed and there is NO need to manually install the software*
+
+## Supported OSes
+
+- Windows
+- Ubuntu
+- Debian 10
 
 ## Use
 
@@ -44,33 +50,31 @@ optional arguments:
 
 ### Examples:
 
-  1. ```python startprocess.py -h``` → shows the above help
-  2. ```python startprocess.py``` → starts program with default options (Extract to WAV only)
-  3. ```python startprocess.py -c``` → extracts WAV and converts these to MP3 (Both WAV and MP3 will be present)
-  4. ```python startprocess.py -c -d``` → extracts WAV, converts to MP3 and deletes the WAV files
-  5. ```python startprocess.py -n``` → uses native apps where possible (instead of resorting to wine)
+  1. ```python3 Startprocess.py -h``` → shows the above help
+  2. ```python3 Startprocess.py``` → starts program with default options (Extract to WAV only)
+  3. ```python3 Startprocess.py -c``` → extracts WAV and converts these to MP3 (Both WAV and MP3 will be present)
+  4. ```python3 Startprocess.py -c -d``` → extracts WAV, converts to MP3 and deletes the WAV files
+  5. ```python3 Startprocess.py -n``` → uses native apps where possible (instead of resorting to wine)
 
+\**Note that ```python3``` applies to Linux while Windows users must replace ```python3``` with ```python``` (and ensuring that the script is run with Python 3).
 ## Notes
 
-- This currently works on Windows only due to use of ```.bat``` files. Cross-compatibility is planned later.
+- This currently works on Windows and Ubuntu, Debian 10 only. Additional OS support is currently underway.
 
-- ~~To have the program convert extracted files to ```.mp3```, edit the following on line 17 of ```startprocess.py```: ```mp3=1``` → ```mp3=0```~~ (See **Use** for update to this)
 - Options only apply to current execution, i.e. files pulled from the previous execution will not be subjected to the current options.
 - Each execution is **additive** (i.e. new files are constantly added and renamed if older files are present)
 
 ## Steps (New):
 
-1. *Start init.bat* (Simple enough) **OR** use either of the commands provided above in the **USE** section.
+1. *Start init.bat* (Simple enough for Windows) **OR** use either of the commands provided above in the **USE** section.
 3. Clean processing folder of stray .wav files
 
 ## Current things to do:
 
-1. ~~Cut down on number of scripts to run~~
-
-2. Creation of switches using getOpt or sys.argv *(Partially complete)*
+1. Creation of switches using getOpt or sys.argv *(Partially complete)*
    - Break each sector into functions and execute based on switches
 5. Handle file extraction location
    - Save extraction locaton to file also -> Handle later due to fast push
 6. Clean code by changing lots of constants to variables
-7. Make cross-compatibility by delivering full Python script ~~/C#~~
+7. ~~Make cross-compatibility by delivering full Python script~~
 8. Due to a problem, if you had used the default options the first time and opted to convert the files to MP3 the second time, the program will convert **ALL** existing WAV to MP3
