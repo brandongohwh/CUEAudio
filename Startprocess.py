@@ -305,7 +305,7 @@ def preCheck():
         a = f.communicate()
         if not ('dotnet45' in str(a)):
             print(st.p3NI)
-            time.sleep(5)
+            time.sleep(10)
             subprocess.call([wineAdd] + ['--force','dotnet45'])
         else:
             print(st.p3AI, end="")
@@ -361,7 +361,7 @@ def preCheck():
             a = f.communicate()
             if not ('dotnet45' in str(a)):
                 print(st.p3NI)
-                time.sleep(5)
+                time.sleep(10)
                 subprocess.call([wineAdd] + ['dotnet45'])
             else:
                 print(st.p3AI, end="")

@@ -26,6 +26,12 @@ p2AI="""Phase 2: Winetricks already installed on system!
 p3NI="""====================================================================================
 Phase 3:
 Initiating installation of .NET Framework 4.5, follow instructions on screen.
+
+**********
+IMPORTANT: If asked to restart, select "Restart Later".
+**********
+
+Commencing installation in 10s.
 ====================================================================================
 """
 p3AI="""Phase 3: .NET Framework 4.5 already installed on system!\n"""
