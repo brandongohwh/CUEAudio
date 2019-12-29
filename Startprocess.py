@@ -319,7 +319,7 @@ def preCheck():
                 print(st.p4AI, end="")
         print(st.pOK)
     elif 'debian' in platform.platform().lower():
-        if 'debian-10' in platform.platform().lower():
+        if 'debian-10' in platform.platform().lower() or 'debian-bullseye' in platform.platform().lower():
             import apt
             cache = apt.Cache()
             pkg1 = cache['wine']
@@ -374,6 +374,9 @@ def preCheck():
                 else:
                     print(st.p4AI, end="")
             print(st.pOK)
+        else:
+            print(st.noSup)
+            sys.exit(0)
     elif platform.system() == 'Windows':
         if not (os.path.exists(dotNET45x86) or os.path.exists(dotNET45x64)):
             print(st.windotNET45)
