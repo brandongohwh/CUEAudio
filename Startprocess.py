@@ -391,6 +391,13 @@ def preCheck():
             print(st.sudoProb)
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
+    elif 'darwin' in platform.platform().lower():
+        #Check if wine is running
+        #subprocess.call(["osascript","-e","tell application \"System Events\"","-e","count (every process whose name is \""+"wine"+"\")","-e","end tell"])
+
+        #Check if XQuartz is installed
+        #sudo find /Applications/Utilities -iname 'XQuartz.app'
+        pass
     else:
         print(st.noSup)
         sys.exit(0)
