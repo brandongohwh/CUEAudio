@@ -392,12 +392,39 @@ def preCheck():
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
     elif 'darwin' in platform.platform().lower():
-        #Check if wine is running
-        #subprocess.call(["osascript","-e","tell application \"System Events\"","-e","count (every process whose name is \""+"wine"+"\")","-e","end tell"])
 
+        #if wine:
+        
+        #Logic for this section:
+        #if wine exists:
+        #   skip
+        #else:
+        #   if XQuartz exists:
+        #       skip
+        #   else:
+        #       install XQuartz
+        #   install wine
+
+
+        #START: 1 TAB FORWARD
+
+        #Check if wine is running
+        x=subprocess.check_output(["osascript","-e","tell application \"System Events\"","-e","count (every process whose name is \""+"wine"+"\")","-e","end tell"])
         #Check if XQuartz is installed
-        #sudo find /Applications/Utilities -iname 'XQuartz.app'
-        pass
+        if not x:
+            print(x)
+            print("-------------")
+            
+            y=subprocess.check_output(['sudo' ,'find' ,'/Applications/Utilities' ,'-iname', 'XQuartz.app'])
+            if not ('XQuartz' in y):
+                subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                #Volume is /Volumes/XQuartz-2.7.7
+                subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+
+            #Install wine here
+        sys.exit(0)
+        #END 1 TAB FORWARD
     else:
         print(st.noSup)
         sys.exit(0)
