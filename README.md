@@ -19,7 +19,10 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 - Python 3
 - .NET Framework 4.5
-- Wine (For Linux)
+- Wine (For Linux/Mac)
+- Homebrew
+    - To install, insert this into a terminal: 
+    ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```
 
 \**For Ubuntu, Debian 10 and Windows, checks are in place to make sure that .NET Framework 4.5 is installed and there is NO need to manually install the software*
 

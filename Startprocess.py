@@ -392,12 +392,67 @@ def preCheck():
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
     elif 'darwin' in platform.platform().lower():
-        #Check if wine is running
-        #subprocess.call(["osascript","-e","tell application \"System Events\"","-e","count (every process whose name is \""+"wine"+"\")","-e","end tell"])
+        print("Not supported because Apple messed up the Unix system")
 
+        #if wine:
+        
+        #Logic for this section:
+        #if wine exists:
+        #   skip
+        #else:
+        #   if XQuartz exists:
+        #       skip
+        #   else:
+        #       install XQuartz
+        #   install wine
+
+
+        #START: 1 TAB FORWARD
+
+        #Check if wine is installed
+        s=subprocess.Popen(['sudo' ,'find' ,'/Applications' ,'-iname', 'Wine'],stdout=subprocess.PIPE)
+        x=s.communicate()
         #Check if XQuartz is installed
-        #sudo find /Applications/Utilities -iname 'XQuartz.app'
-        pass
+        if not 'wine' in str(x).lower(): 
+            try:           
+                y=subprocess.check_output(['sudo' ,'find' ,'/Applications/Utilities' ,'-iname', 'XQuartz.app'])
+                if 'XQuartz' in str(y):
+                    a=str(subprocess.check_output(['mdls', '-name', 'kMDItemVersion', '/Applications/Utilities/XQuartz.app'])).split()[2].strip('\'').strip('\\n').strip('\"').split('.')
+                    if int(a[0])<2 or int(a[0])==2 and int(a[1])<7 or int(a[0])==2 and int(a[1])==7 and int(a[2])<7:
+                        subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                        #Volume is /Volumes/XQuartz-2.7.7
+                        subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                        subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+                else:
+                    subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                    #Volume is /Volumes/XQuartz-2.7.7
+                    subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                    subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+
+            except:
+                subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                #Volume is /Volumes/XQuartz-2.7.7
+                subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+            subprocess.call(['sudo' ,'installer' ,'-package', 'installer/winehq-stable-4.0.3.pkg' ,'-target','/'])
+
+        #Add print for wine-mono and gecko installation (prompts on screen)
+        #Not using homebrew due to missing samba3
+        #Using macports instead
+        #User needs to ensure xcode is installed or just follow the macports guide to install the whole thing
+        #https://guide.macports.org/#installing.xcode
+        #https://github.com/macports/macports-base/releases/
+        if os.path.exists('/opt/local/bin/port'):
+            subprocess.call(['sudo','/opt/local/bin/port','install','samba4'])
+        else:
+            print("MacPorts not installed!")
+            sys.exit(0)
+        #subprocess.call([subprocess.call(['wine', 'installer/dotNetFx45_Full_setup.exe'])])
+        
+        
+        subprocess.call(['/Applications/Wine Stable.app/Contents/Resources/wine/bin/wine','installer/dotNetFx45_Full_setup.exe'])
+        sys.exit(0)
+        #END 1 TAB FORWARD
     else:
         print(st.noSup)
         sys.exit(0)
