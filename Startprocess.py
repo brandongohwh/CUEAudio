@@ -448,7 +448,7 @@ def preCheck():
         if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
-            subprocess.call(['wineboot','-r'])
+            subprocess.call(['wineboot','-u'])
         else:
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
         
