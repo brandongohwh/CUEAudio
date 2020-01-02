@@ -20,8 +20,9 @@ All copyright from the use of the programs mentioned goes to the respective copy
 - Python 3
 - .NET Framework 4.5
 - Wine (For Linux/Mac)
+- XQuartz (Mac)
 
-\**For supported OSes, checks are in place to make sure that all required programs are installed and configured,  so there is NO need to manually install the software*
+\**Except for **Python3**, checks are in place to make sure that all required programs are installed and configured, so there is NO need to manually install the software*
 
 ## Supported OSes
 
@@ -33,7 +34,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 ## Use
 
 ```
-usage: Startprocess.py [-h] [-o OUT] [-a ANAME] [-init] [-c] [-d] [-p P] [-n]
+usage: Startprocess.py [-h] [-o OUT] [-a ANAME] [-init] [-c] [-d] [-p P]
 
 CUE! Audio Puller
 
@@ -46,7 +47,6 @@ optional arguments:
   -d          Deletes WAV
   -p P        Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet
               implemented)
-  -n          Use Native apps where available (Not available for Mac OS X)
   ```
 
 ### Examples:
@@ -55,14 +55,18 @@ optional arguments:
   2. ```python3 Startprocess.py``` → starts program with default options (Extract to WAV only)
   3. ```python3 Startprocess.py -c``` → extracts WAV and converts these to MP3 (Both WAV and MP3 will be present)
   4. ```python3 Startprocess.py -c -d``` → extracts WAV, converts to MP3 and deletes the WAV files
-  5. ```python3 Startprocess.py -n``` → uses native apps where possible (instead of resorting to wine)
+  5. ~~```python3 Startprocess.py -n``` → uses native apps where possible (instead of resorting to wine)~~
 
 \**Note that ```python3``` applies to Linux while Windows users must replace ```python3``` with ```python``` (and ensuring that the script is run with Python 3).
+
 ## Notes
 
 - More support for other OSes are ongoing.
 - Options only apply to current execution, i.e. files pulled from the previous execution will not be subjected to the current options.
 - Each execution is **additive** (i.e. new files are constantly added and renamed if older files are present)
+- Native app support is removed to maintain hash consistency across platforms. 
+
+\**Important*: File hashes on Mac will be different due to Wine having errors on Mac **APFS** filesystem (**Don't file issues to me about this, direct it to Apple**)
 
 ## Steps (New):
 
@@ -78,3 +82,4 @@ optional arguments:
 6. Clean code by changing lots of constants to variables
 7. ~~Make cross-compatibility by delivering full Python script~~
 8. Due to a problem, if you had used the default options the first time and opted to convert the files to MP3 the second time, the program will convert **ALL** existing WAV to MP3
+9. Formatting of printing statements due to current flooding of CLI
