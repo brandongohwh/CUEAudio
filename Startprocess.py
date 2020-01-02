@@ -125,6 +125,15 @@ def ADBexec(init=0):
         subprocess.call(['chmod','+x',os.path.join(adbPre,'mac','adb')])
         x = subprocess.call(
             [os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
+        if x:
+            t = 3
+            for i in range(t):
+                print(
+                    "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
+                time.sleep(5)
+                x = subprocess.call([os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
+                if not x:
+                    break
     elif platform.system() == 'Linux':
         subprocess.call(
             ['chmod', '+x', os.path.join(adbPre, 'linux', 'adb')])
