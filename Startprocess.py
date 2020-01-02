@@ -447,8 +447,12 @@ def preCheck():
         os.environ['WINEARCH']= "win32"
         os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
         #subprocess.call(['wineboot','-u'])
+        print(1)
         if os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
+            print(2)
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
+            print(3)
+        print(4)
         #subprocess.call(['which','wine'])
         #sys.exit(0)
         #END 1 TAB FORWARD
