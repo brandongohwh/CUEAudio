@@ -20,17 +20,15 @@ All copyright from the use of the programs mentioned goes to the respective copy
 - Python 3
 - .NET Framework 4.5
 - Wine (For Linux/Mac)
-- Homebrew
-    - To install, insert this into a terminal: 
-    ```/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"```
 
-\**For Ubuntu, Debian 10 and Windows, checks are in place to make sure that .NET Framework 4.5 is installed and there is NO need to manually install the software*
+\**For supported OSes, checks are in place to make sure that all required programs are installed and configured,  so there is NO need to manually install the software*
 
 ## Supported OSes
 
 - Windows
 - Ubuntu
-- Debian 10
+- Debian 10 (& bullseye)
+- Mac OS X (Tested on Mojave)
 
 ## Use
 
@@ -48,7 +46,7 @@ optional arguments:
   -d          Deletes WAV
   -p P        Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet
               implemented)
-  -n          Use Native apps where available (Only Ubuntu for now)
+  -n          Use Native apps where available (Not available for Mac OS X)
   ```
 
 ### Examples:
@@ -62,8 +60,7 @@ optional arguments:
 \**Note that ```python3``` applies to Linux while Windows users must replace ```python3``` with ```python``` (and ensuring that the script is run with Python 3).
 ## Notes
 
-- This currently works on Windows and Ubuntu, Debian 10 only. Additional OS support is currently underway.
-
+- More support for other OSes are ongoing.
 - Options only apply to current execution, i.e. files pulled from the previous execution will not be subjected to the current options.
 - Each execution is **additive** (i.e. new files are constantly added and renamed if older files are present)
 
