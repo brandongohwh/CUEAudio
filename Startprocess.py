@@ -402,7 +402,7 @@ def preCheck():
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
     elif 'darwin' in platform.platform().lower():
-        print("Not supported because Apple messed up the Unix system")
+        print("Apple messed up the Unix system, pls tell them to fix")
 
         #if wine:
         
