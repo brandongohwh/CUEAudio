@@ -451,9 +451,9 @@ def preCheck():
         #Only wine stable supported currently
         os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
         os.environ['WINEARCH']= "win32"
-        os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet2"
+        os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
         #subprocess.call(['wineboot','-u'])
-        if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet2','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
+        if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
         #subprocess.call(['which','wine'])
         #sys.exit(0)
