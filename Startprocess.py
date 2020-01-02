@@ -57,8 +57,7 @@ parser.add_argument('-c', action='store_true', dest='conv',
 parser.add_argument('-d', action='store_true', dest='Del', help='Deletes WAV')
 parser.add_argument(
     '-p', type=int, help="Port number for ADB, applies to Bluestacks/NoxPlayer (Not yet implemented)")
-parser.add_argument('-n', action='store_true', dest='nat',
-                    help='Use Native apps where available (Only Ubuntu)')
+
 
 args = parser.parse_args()
 
@@ -319,14 +318,6 @@ def preCheck():
             subprocess.call([wineAdd] + ['--force','dotnet45'])
         else:
             print(st.p3AI, end="")
-        if args.nat == True:
-            pkg4 = cache[mp3]
-            if not pkg4.is_installed:
-                print(st.p4NI)
-                time.sleep(10)
-                subprocess.call(sudoAPT+[mp3] + sudoNoPrompt)
-            else:
-                print(st.p4AI, end="")
         print(st.pOK)
     elif 'debian' in platform.platform().lower():
         if 'debian-10' in platform.platform().lower() or 'debian-bullseye' in platform.platform().lower():
@@ -375,14 +366,6 @@ def preCheck():
                 subprocess.call([wineAdd] + ['dotnet45'])
             else:
                 print(st.p3AI, end="")
-            if args.nat == True:
-                pkg4 = cache[mp3]
-                if not pkg4.is_installed:
-                    print(st.p4NI)
-                    time.sleep(10)
-                    subprocess.call(sudoAPT+[mp3] + sudoNoPrompt)
-                else:
-                    print(st.p4AI, end="")
             print(st.pOK)
         else:
             print(st.noSup)
@@ -410,7 +393,7 @@ def preCheck():
         #if wine exists:
         #   skip
         #else:
-        #   if XQuartz exists:
+        #   if XQuartz exists and version OK: <- stupid apple didnt include XQuartz, so need to install it manually and perform checks
         #       skip
         #   else:
         #       install XQuartz
@@ -458,6 +441,8 @@ def preCheck():
                 f3.close()
             subprocess.call(['sudo' ,'installer' ,'-package', 'installer/winehq-stable-4.0.3.pkg' ,'-target','/'])        
         #Only wine stable supported currently
+
+        #First time install requires accepting installation of wine-mono and something else, just prompt user to click accept/install (code for this should be just under package installer since new dir not affected)
         os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
         os.environ['WINEARCH']= "win32"
         os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
@@ -500,22 +485,11 @@ def convFile():
                     if os.path.splitext(s)[1].lower() in ['.wav']:
                         if not (os.path.splitext(s)[0]+'.mp3') in os.listdir(os.path.join(r, l)):
                             if platform.system() == "Windows":
-                                if (struct.calcsize("P") * 8) == 64:  # 32 for 32-bit & 64 for 64-bit
-                                    subprocess.call([os.path.join(mp3Pre, 'win64', 'lame.exe'), os.path.join(
+                                subprocess.call([os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
                                         r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
-                                elif (struct.calcsize("P") * 8) == 32:
-                                    subprocess.call([os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
-                                        r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
-                            elif platform.system() == "Darwin":
+                            elif platform.system() == "Darwin" or platform.system() == "Linux":
                                 #No support for native
                                 subprocess.call(['wine', os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
-                                        r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
-                            elif platform.system() == "Linux":
-                                if args.nat:
-                                    subprocess.call(['lame', os.path.join(r, l, s), os.path.splitext(
-                                        os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
-                                else:
-                                    subprocess.call(['wine', os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
                                         r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
 
 
