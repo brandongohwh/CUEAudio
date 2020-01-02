@@ -65,7 +65,7 @@ optional arguments:
 - Each execution is **additive** (i.e. new files are constantly added and renamed if older files are present)
 - Native app support is removed to maintain hash consistency across platforms. 
 
-\**Important*: file hashes on Mac will be different due to Wine having errors on Mac APFS filesystem (**Don't file issues to me about this, direct it to Apple**)
+\**Important*: File hashes on Mac will be different due to Wine having errors on Mac **APFS** filesystem (**Don't file issues to me about this, direct it to Apple**)
 
 ## Steps (New):
 
