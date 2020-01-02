@@ -20,6 +20,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 - Python 3
 - .NET Framework 4.5
 - Wine (For Linux/Mac)
+- XQuartz (Mac)
 
 \**Except for **Python3**, checks are in place to make sure that all required programs are installed and configured, so there is NO need to manually install the software*
 
