@@ -442,12 +442,12 @@ def preCheck():
             subprocess.call(['sudo' ,'installer' ,'-package', 'installer/winehq-stable-4.0.3.pkg' ,'-target','/'])        
         #Only wine stable supported currently
 
-        #First time install requires accepting installation of wine-mono and something else, just prompt user to click accept/install (code for this should be just under package installer since new dir not affected)
+        #First time install requires accepting installation of wine-mono and gecko, just prompt user to click install (code for this should be just under package installer since new dir not affected)
         os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
         os.environ['WINEARCH']= "win32"
         os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
         #subprocess.call(['wineboot','-u'])
-        if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
+        if os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
         #subprocess.call(['which','wine'])
         #sys.exit(0)
