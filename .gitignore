@@ -4,6 +4,7 @@ Sound/
 Extracted/
 .vscode/
 updatedfolder.log
+installer/winehq-stable-4.0.3.pkg
 
 # Other files and folders
 *.code-workspace
@@ -14,4 +15,5 @@ updatedfolder.log
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+
 

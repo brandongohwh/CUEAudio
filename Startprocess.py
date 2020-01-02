@@ -122,8 +122,18 @@ def ADBexec(init=0):
                     break
 
     elif platform.system() == 'Darwin':
+        subprocess.call(['chmod','+x',os.path.join(adbPre,'mac','adb')])
         x = subprocess.call(
             [os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
+        if x:
+            t = 3
+            for i in range(t):
+                print(
+                    "(Attempt %d of %d) You may need to authorise ADB to access your Android device! Waiting for 5 seconds." % (i+1, t))
+                time.sleep(5)
+                x = subprocess.call([os.path.join(adbPre, 'mac', 'adb'), 'pull', AndroidLoc, pullLoc])
+                if not x:
+                    break
     elif platform.system() == 'Linux':
         subprocess.call(
             ['chmod', '+x', os.path.join(adbPre, 'linux', 'adb')])
@@ -214,7 +224,7 @@ def ACB2WAV():
                     if platform.system() == 'Windows':
                         subprocess.call(
                             [os.path.join(dere, 'acbUnzip.exe'), os.path.join(r, l, s)])
-                    elif platform.system() == 'Linux':
+                    elif platform.system() == 'Linux' or platform.system()=='Darwin':
                         subprocess.call(['wine', os.path.join(
                             dere, 'acbUnzip.exe'), os.path.join(r, l, s)])
 
@@ -226,7 +236,7 @@ def ACB2WAV():
                     if platform.system() == 'Windows':
                         subprocess.call(
                             [os.path.join(dere, 'hca2wav.exe'), os.path.join(r, l, s)])
-                    elif platform.system() == 'Linux':
+                    elif platform.system() == 'Linux' or platform.system()=='Darwin':
                         subprocess.call(['wine', os.path.join(
                             dere, 'hca2wav.exe'), os.path.join(r, l, s)])
 
@@ -391,6 +401,72 @@ def preCheck():
             print(st.sudoProb)
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
+    elif 'darwin' in platform.platform().lower():
+        print("Apple messed up the Unix system, pls tell them to fix")
+
+        #if wine:
+        
+        #Logic for this section:
+        #if wine exists:
+        #   skip
+        #else:
+        #   if XQuartz exists:
+        #       skip
+        #   else:
+        #       install XQuartz
+        #   install wine
+
+
+        #START: 1 TAB FORWARD
+
+        #Check if wine is installed
+        s=subprocess.Popen(['sudo' ,'find' ,'/Applications' ,'-iname', 'Wine'],stdout=subprocess.PIPE)
+        x=s.communicate()
+        #Check if XQuartz is installed
+        if not 'wine' in str(x).lower(): 
+            try:           
+                y=subprocess.check_output(['sudo' ,'find' ,'/Applications/Utilities' ,'-iname', 'XQuartz.app'])
+                if 'XQuartz' in str(y):
+                    a=str(subprocess.check_output(['mdls', '-name', 'kMDItemVersion', '/Applications/Utilities/XQuartz.app'])).split()[2].strip('\'').strip('\\n').strip('\"').split('.')
+                    if int(a[0])<2 or int(a[0])==2 and int(a[1])<7 or int(a[0])==2 and int(a[1])==7 and int(a[2])<7:
+                        subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                        #Volume is /Volumes/XQuartz-2.7.7
+                        subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                        subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+                else:
+                    subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                    #Volume is /Volumes/XQuartz-2.7.7
+                    subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                    subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+
+            except:
+                subprocess.call(['sudo','hdiutil','attach','installer/XQuartz-2.7.7.dmg'])
+                #Volume is /Volumes/XQuartz-2.7.7
+                subprocess.call(['sudo' ,'installer' ,'-package', '/Volumes/XQuartz-2.7.7/XQuartz.pkg' ,'-target','/'])
+                subprocess.call(['sudo' ,'hdiutil', 'detach' ,'/Volumes/XQuartz-2.7.7/'])
+            if not os.path.exists(os.path.join(ori,'installer','winehq-stable-4.0.3.pkg')):
+                f1=open(os.path.join(ori,'installer','xaa'),'rb')
+                f2=open(os.path.join(ori,'installer','xab'),'rb')
+                f3=open(os.path.join(ori,'installer','winehq-stable-4.0.3.pkg'),'wb')
+                for dat in f1:
+                    f3.write(dat)
+                for dat in f2:
+                    f3.write(dat)
+                f1.close()
+                f2.close()
+                f3.flush()
+                f3.close()
+            subprocess.call(['sudo' ,'installer' ,'-package', 'installer/winehq-stable-4.0.3.pkg' ,'-target','/'])        
+        #Only wine stable supported currently
+        os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
+        os.environ['WINEARCH']= "win32"
+        os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
+        #subprocess.call(['wineboot','-u'])
+        if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
+            subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
+        #subprocess.call(['which','wine'])
+        #sys.exit(0)
+        #END 1 TAB FORWARD
     else:
         print(st.noSup)
         sys.exit(0)
@@ -431,8 +507,9 @@ def convFile():
                                     subprocess.call([os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
                                         r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
                             elif platform.system() == "Darwin":
-                                # Install lame on Mac
-                                pass  # For mac
+                                #No support for native
+                                subprocess.call(['wine', os.path.join(mp3Pre, 'win32', 'lame.exe'), os.path.join(
+                                        r, l, s), os.path.splitext(os.path.join(r, l, s))[0]+'.mp3', '-b', '320'])
                             elif platform.system() == "Linux":
                                 if args.nat:
                                     subprocess.call(['lame', os.path.join(r, l, s), os.path.splitext(
