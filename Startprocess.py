@@ -385,23 +385,7 @@ def preCheck():
         # Edited visudo with <user> ALL=(ALL) ALL
         sys.exit(0)
     elif 'darwin' in platform.platform().lower():
-        print("Apple messed up the Unix system, pls tell them to fix")
-
-        #if wine:
-        
-        #Logic for this section:
-        #if wine exists:
-        #   skip
-        #else:
-        #   if XQuartz exists and version OK: <- stupid apple didnt include XQuartz, so need to install it manually and perform checks
-        #       skip
-        #   else:
-        #       install XQuartz
-        #   install wine
-
-
-        #START: 1 TAB FORWARD
-
+        print(st.macWarn)
         #Check if wine is installed
         s=subprocess.Popen(['sudo' ,'find' ,'/Applications' ,'-iname', 'Wine'],stdout=subprocess.PIPE)
         x=s.communicate()
@@ -443,6 +427,10 @@ def preCheck():
         #Only wine stable supported currently
 
         #First time install requires accepting installation of wine-mono and gecko, just prompt user to click install (code for this should be just under package installer since new dir not affected)
+        print("""==================================================================================================
+Wine will prompt for installation of wine-mono and gecko, you must accept installation.
+==================================================================================================""")
+        time.sleep(5)
         os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
         #Test and see
         os.environ['WINEARCH']= "win32"
@@ -455,11 +443,7 @@ def preCheck():
             #sys.exit(0)
         else:
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
-        
 
-        #subprocess.call(['which','wine'])
-        #sys.exit(0)
-        #END 1 TAB FORWARD
     else:
         print(st.noSup)
         sys.exit(0)
