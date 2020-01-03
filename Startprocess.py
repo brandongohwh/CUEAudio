@@ -450,7 +450,7 @@ def preCheck():
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
             #print("Due to a problem with Mac systems, initial execution requires a force termination of this program to update the software required. Otherwise, ")
-            #subprocess.call(['wineboot','-u'])
+            subprocess.call(['wineboot','-u'])
             #sys.exit(0)
         else:
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
