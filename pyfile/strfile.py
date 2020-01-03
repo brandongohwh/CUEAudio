@@ -108,20 +108,23 @@ br="-----------------------------------------------\n"
 Tbr="\n-------------------------------------------------------------------------------------------------------------------------\n"
 Fbr="-------------------------------------------------------------------------------------------------------------------------\n"
 macWarn="""
-*************************************************************************************************
-| DUE TO APPLE REMOVING 32-bit SUPPORT, WINE CANNOT WORK PROPERLY AND CAUSE FILE HASHES         |
-| TO DIFFER FROM WINDOWS & LINUX.                                                               |
-| DONT ASK ME WHY, ASK APPLE WHY THEY HATE DEVELOPERS & DONT ADD A COMPAT LAYER FOR 32-bit.     |
-|                                                                                               |
-| TO CIRCUMVENT THIS PROBLEM,                                                                   |
-| 1) DO NOT UPGRADE TO CATALINA                                                                 |
-| 2) INSTALL BOOTCAMP AND RUN WINDOWS/LINUX                                                     |
-| 3) JUST USE A WINDOWS COMPUTER IF YOU DONT USE ANY PARTICULAR PROGRAM ON MAC                  |
-| 4) Get Deretore to release software in a language that is cross-platform compatible.          |
-|                                                                                               |
-| THIS CODE WILL ATTEMPT TO DO WHAT IT IS SUPPOSED TO DO, BUT THERE WILL BE NO GUARANTEE THAT   |
-| FILES EXTRACTED ARE FREE FROM PROBLEMS                                                        |
-*************************************************************************************************
+**************************************************************************
+| DUE TO APPLE REMOVING 32-bit SUPPORT, WINE WILL NOT WORK PROPERLY AND  |
+| CAUSE FILE HASHES TO DIFFER FROM WINDOWS & LINUX.                      |
+| DONT ASK ME WHY, ASK APPLE WHY THEY HATE DEVELOPERS & DONT ADD A       |
+| COMPAT LAYER FOR 32-bit.                                               |
+|                                                                        |
+| TO CIRCUMVENT THIS PROBLEM,                                            |
+| 1) DO NOT UPGRADE TO CATALINA                                          |
+| 2) INSTALL BOOTCAMP AND RUN WINDOWS/LINUX                              |
+| 3) JUST USE A WINDOWS COMPUTER IF YOU DONT USE ANY                     |
+|    PARTICULAR PROGRAM ON MAC                                           |
+| 4) Get Deretore to release software in a language that is              |
+|    cross-platform compatible.                                          |
+|                                                                        |
+| THIS CODE WILL ATTEMPT TO DO WHAT IT IS SUPPOSED TO DO, BUT THERE      |
+| WILL BE NO GUARANTEE THAT FILES EXTRACTED ARE FREE FROM PROBLEMS       |
+**************************************************************************
 """
 
 
