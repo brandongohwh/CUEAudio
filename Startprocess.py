@@ -445,7 +445,7 @@ def preCheck():
         #First time install requires accepting installation of wine-mono and gecko, just prompt user to click install (code for this should be just under package installer since new dir not affected)
         os.environ["PATH"]+=os.pathsep+'/Applications/Wine Stable.app/Contents/Resources/wine/bin'
         #Test and see
-        #os.environ['WINEARCH']= "win32"
+        os.environ['WINEARCH']= "win32"
         if not os.path.exists(os.path.join(os.path.expanduser("~"), '.winedotnet','drive_c','windows', 'Microsoft.NET', 'Framework', 'v4.0.30319')):
             os.environ['WINEPREFIX']=os.path.expanduser("~")+os.path.sep+".winedotnet"
             subprocess.call(['wine','installer/dotnetfx45_full_x86_x64.exe'])
