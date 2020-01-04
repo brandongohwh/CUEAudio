@@ -17,3 +17,6 @@ installer/winehq-stable-4.0.3.pkg
 # information for Eclipse / Flash Builder.
 
 
+filelist.md
+fl.py
+ch.md
