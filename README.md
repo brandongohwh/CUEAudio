@@ -37,7 +37,7 @@ All copyright from the use of the programs mentioned goes to the respective copy
 
 ## Use
 
-```python3
+```text
 usage: Startprocess.py [-h] [-o OUT] [-a ANAME] [-init] [-c] [-d] [-p P]
 
 CUE! Audio Puller
