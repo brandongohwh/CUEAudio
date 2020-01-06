@@ -13,6 +13,7 @@ import struct
 import argparse
 import shutil
 import pyfile.strfile as st
+import fl
 
 # Initialisation section (IMPORTANT: DO NOT MOVE)
 abspath = os.path.abspath(__file__)
@@ -521,4 +522,5 @@ if (args.conv):
 if (args.Del):
     delWAV()
 
-print("Complete! Log file is in %s" % ori)
+fl.port()
+print("\nComplete! Log file is in %s\nTo view the file list and the files added in a simplified view,\nlook at filelist.md and changelog.md." % ori)
