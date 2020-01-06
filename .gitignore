@@ -5,6 +5,10 @@ Extracted/
 .vscode/
 updatedfolder.log
 installer/winehq-stable-4.0.3.pkg
+fl.md
+fl.py
+chl.md
+
 
 # Other files and folders
 *.code-workspace
@@ -15,8 +19,3 @@ installer/winehq-stable-4.0.3.pkg
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
-
-
-filelist.md
-fl.py
-ch.md
