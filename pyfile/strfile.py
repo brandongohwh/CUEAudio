@@ -23,6 +23,24 @@ Commencing installation in 10s.
 """
 p2AI="""Phase 2: Winetricks already installed on system!
 """
+p1MacNI="""====================================================================================
+Phase 1:
+XQuartz has not been detected on the system or is outdated, preparing to install.
+Provide sudo password if prompted!
+Commencing installation in 10s.
+===================================================================================="""
+p1MacAI="""====================================================================================
+Phase 1: XQuartz already installed on system!
+"""
+p2MacNI="""====================================================================================
+Phase 2:
+Wine has not been detected on the system, preparing to install.
+Provide sudo password if prompted!
+Commencing installation in 10s.
+====================================================================================
+"""
+p2MacAI="""Phase 2: Wine already installed on system!
+"""
 p3NI="""====================================================================================
 Phase 3:
 Initiating installation of .NET Framework 4.5, follow instructions on screen.
@@ -126,9 +144,10 @@ macWarn="""
 | WILL BE NO GUARANTEE THAT FILES EXTRACTED ARE FREE FROM PROBLEMS       |
 **************************************************************************
 """
-
-
-
+macMonoGecko="""====================================================================================
+Accept installation of wine-mono & gecko if prompted by wine.
+====================================================================================
+"""
 
 
 
