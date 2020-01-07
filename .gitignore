@@ -6,6 +6,8 @@ Extracted/
 updatedfolder.log
 installer/winehq-stable-4.0.3.pkg
 
+# adb pull "/sdcard/Android/data/jp.co.liberent.cue/files/UnityCache/Shared/Master/." ./pullMaster
+pullMaster/
 
 # Other files and folders
 *.code-workspace
