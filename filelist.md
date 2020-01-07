@@ -48,32 +48,32 @@
   - voice
     - broadcast
       - 6001
-        - BroadCast_6001_01
-        - BroadCast_6001_02
-        - BroadCast_6001_03
-        - BroadCast_6001_04
-        - BroadCast_6001_05
-        - BroadCast_6001_06
-        - BroadCast_6001_07
-        - BroadCast_6001_08
-        - BroadCast_6001_09
-        - BroadCast_6001_10
+        - BroadCast_6001_01: CUE!ROOM -1-
+        - BroadCast_6001_02: CUE!ROOM -2-
+        - BroadCast_6001_03: CUE!ROOM -3-
+        - BroadCast_6001_04: CUE!ROOM -4-
+        - BroadCast_6001_05: CUE!ROOM -5-
+        - BroadCast_6001_06: CUE!ROOM -6-
+        - BroadCast_6001_07: CUE!ROOM -7-
+        - BroadCast_6001_08: CUE!ROOM -8-
+        - BroadCast_6001_09: CUE!ROOM -9-
+        - BroadCast_6001_10: CUE!ROOM -10-
     - recording_anime
-      - Voice_Anime_01_1
-      - Voice_Anime_01_2
-      - Voice_Anime_01_3
-      - Voice_Anime_02_1
-      - Voice_Anime_02_2
-      - Voice_Anime_02_3
-      - Voice_Anime_03_1
-      - Voice_Anime_03_2
-      - Voice_Anime_03_3
-      - Voice_Anime_04_1
-      - Voice_Anime_04_2
-      - Voice_Anime_04_3
-      - Voice_Anime_05_1
-      - Voice_Anime_05_2
-      - Voice_Anime_05_3
+      - Voice_Anime_01_1: 魔法少女協会 マジック◆ワークス
+      - Voice_Anime_01_2: 魔法少女協会 マジック◆ワークス
+      - Voice_Anime_01_3: 魔法少女協会 マジック◆ワークス
+      - Voice_Anime_02_1: ふぇありん∞ふぇありん
+      - Voice_Anime_02_2: ふぇありん∞ふぇありん
+      - Voice_Anime_02_3: ふぇありん∞ふぇありん
+      - Voice_Anime_03_1: こんにちは、いただきます。
+      - Voice_Anime_03_2: こんにちは、いただきます。
+      - Voice_Anime_03_3: こんにちは、いただきます。
+      - Voice_Anime_04_1: 黒白のグィネヴィア
+      - Voice_Anime_04_2: 黒白のグィネヴィア
+      - Voice_Anime_04_3: 黒白のグィネヴィア
+      - Voice_Anime_05_1: C.Q.
+      - Voice_Anime_05_2: C.Q.
+      - Voice_Anime_05_3: C.Q.
     - scenario
       - Card
         - Card_01
