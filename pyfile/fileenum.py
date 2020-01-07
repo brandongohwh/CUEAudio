@@ -2,33 +2,50 @@
 
 import sys
 import os
+import csv
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 
 def addpair(val,sn):
-    f=open(os.path.join(dname,'musicval.txt'),'a+',encoding="utf-8")
-    f.write('%d %s\n'%(val,sn))
+    if os.path.exists(os.path.join(dname,'musicval.csv')):
+        f=open(os.path.join(dname,'musicval.csv'),'r',encoding="utf-8")
+        fr=csv.reader(f)
+        for i in fr:
+            if int(i[0])==int(val):
+                print("Entry already exists!")
+                return
+    f=open(os.path.join(dname,'musicval.csv'),'a+',encoding="utf-8",newline="")
+    fw=csv.writer(f)
+    fw.writerow([int(val),sn])
+    f.flush()
     f.close()
 
 def removepair(val):
-    if os.path.exists(os.path.join(dname,'musicval.txt')):
-        f=open(os.path.join(dname,'musicval.txt'),'r',encoding="utf-8")
+    if os.path.exists(os.path.join(dname,'musicval.csv')):
+        f=open(os.path.join(dname,'musicval.csv'),'r',encoding="utf-8")
+        fr=csv.reader(f)
     else:
         print('No data in file')
-        sys.exit(0)
-    l=f.readlines()
-    print(l)
+        return
     h=[]
     j=[]
-    for i in l:
-        h.append(i.split()[0])
-        j.append(' '.join(i.split()[1:]))
+    cnt=0
+    for i in fr:
+        h.append(i[0])
+        j.append(i[1])
+        if int(i[0])==int(val):
+            cnt+=1
+    if cnt==0:
+        print("Value not in file")
+        sys.exit(0)
     f.close()
-    f=open(os.path.join(dname,'musicval.txt'),'w',encoding="utf-8")
-    for i in range(len(l)):
-        if int(h[i])!=val:
-            f.write('%d %s\n'%(int(h[i]),j[i]))
+    f=open(os.path.join(dname,'musicval.csv'),'w',encoding="utf-8",newline="")
+    fw=csv.writer(f)
+    for i in range(len(h)):
+        if int(h[i])!=int(val):
+            print(h[i])
+            fw.writerow([int(h[i]),j[i]])
         else:
             print("Removed!")
     f.flush()
