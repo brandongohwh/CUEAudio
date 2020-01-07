@@ -18,6 +18,7 @@ def port():
                 nf.append(fs)
         ls.sort()
         nf.sort()
+        ''' #START OF mute file output
         for a in ls:
             if not a in l:
                 if 'bgm' in loc.lower():
@@ -48,7 +49,7 @@ def port():
                         fop.write('%s- %s\n' % ((depth+1)*2*' ', a))
                 else:
                     fop.write('%s- %s\n' % ((depth+1)*2*' ', a))
-
+        ''' #END OF mute file output
         for b in nf:
             # fop.write('%s- %s\n'%((depth+1)*4*' ',b))
             folwalk(os.path.join(loc, b), depth+1)
@@ -58,18 +59,19 @@ def port():
     val1 = []
     desc1 = []
     for i in fr:
+        if not i[0].isdigit():
+            continue
         val1.append(int(i[0]))
         desc1.append(i[1])
     
     #Pending CSV conversion
-    f2 = open('pyfile'+os.path.sep+'folname.txt', 'r',encoding='utf-8')
-    r2 = f2.readlines()
+    f2 = open('pyfile'+os.path.sep+'folname.csv', 'r',encoding='utf-8')
+    fr2=csv.reader(f2)
     val2 = []
     desc2 = []
-    for i in r2:
-        val2.append(i.split()[0])
-        desc2.append(' '.join(i.strip('\n').split()[1:]))
-
+    for i in fr2:
+        val2.append(i[0])
+        desc2.append(i[1])
 
     abspath = os.path.abspath(__file__)
     dname = os.path.dirname(abspath)
@@ -97,4 +99,5 @@ def port():
     mop.flush()
     mop.close()
 
-port()
+if __name__ == '__main__':
+    port()
