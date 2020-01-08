@@ -10,4 +10,4 @@ for i in os.listdir(os.path.join(dname,'pullMaster','MonoBehaviour')):
     for a in range(len(l)):
         if sys.argv[1] in l[a]:
             print(i)
-            print(l[a])
+            print(l[a].strip(),'\n')
