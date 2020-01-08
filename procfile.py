@@ -48,3 +48,9 @@ for i in range(len(h)):
                 if int(x[t].split('=')[1])==int(h[i].split('=')[1]):
                     for a in range(1,4):
                         foe.addpair("Voice_Anime_{0:0=2d}_{1:0=1d}".format(int(h[i].split('=')[1]),a),x[t+2].split('=')[1].strip().strip('"'))
+
+f=open('pullMaster'+os.path.sep+'MonoBehaviour'+os.path.sep+'StoryCardMaster.txt','r',encoding="utf-8")
+h=f.readlines()
+for i in range(len(h)):
+    if 'int cardMasterId' in h[i]:
+        foe.addpair("Card_{0:0=7d}_{1:0=1d}".format(int(h[i].split('=')[1]),int(h[i+1].split('=')[1])),h[i+2].split('=')[1].strip().strip('"'))

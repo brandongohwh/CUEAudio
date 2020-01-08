@@ -77,10 +77,10 @@
     - scenario
       - Card
         - Card_01
-          - Card_4010005_1
-          - Card_4010005_2
+          - Card_4010005_1: Forever Friends -1-
+          - Card_4010005_2: Forever Friends -2-
         - Card_02
-          - Card_3020004_1
+          - Card_3020004_1: カミズ・ホリデイ -1-
       - Event
         - Event_001
           - Event_001_01: Girls meet meat! -1-
